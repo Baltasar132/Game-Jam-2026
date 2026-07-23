@@ -3171,6 +3171,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6d4838e811ad5d477b4dc8dbe3f60f2c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: '::'
+  width: 10
+  height: 10
+  cellWidth: 3
+  buildings: 
 --- !u!4 &928056511
 Transform:
   m_ObjectHideFlags: 0
