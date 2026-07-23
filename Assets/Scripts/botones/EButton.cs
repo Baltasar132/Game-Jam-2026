@@ -1,11 +1,11 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class QButton : MonoBehaviour, IBuilderPlacer
+public class EButton : MonoBehaviour, IBuilderPlacer
 {
-    public static QButton INSTANCE;
-    [SerializeField] private GameObject towerPrefab;
-    [SerializeField] private GameObject ghostTowerPrefab;
+    public static EButton INSTANCE;
+    [SerializeField] private GameObject housePrefab;
+    [SerializeField] private GameObject ghostHousePrefab;
 
     void Awake()
     {
@@ -14,7 +14,7 @@ public class QButton : MonoBehaviour, IBuilderPlacer
 
     void FixedUpdate()
     {
-        if (InputSystem.actions["QButton"].IsPressed())
+        if (InputSystem.actions["EButton"].IsPressed())
         {
             Use();
         }
@@ -22,7 +22,7 @@ public class QButton : MonoBehaviour, IBuilderPlacer
 
     void Use()
     {
-        MouseHandler.CreateGhost(this.ghostTowerPrefab, this);
+        MouseHandler.CreateGhost(this.ghostHousePrefab, this);
         // TODO: sound
     }
 
@@ -32,12 +32,11 @@ public class QButton : MonoBehaviour, IBuilderPlacer
         //TODO: ResourceManager.SubRes(PriceManager.getWoodWorkerPrice());
         //TODO: ResourceManager.AddWorkers(ResType.Wood);
         //TODO: sound
-        GameObject tower = Instantiate(towerPrefab, Builds.GetGameObject().transform);
+        GameObject tower = Instantiate(housePrefab, Builds.GetGameObject().transform);
         tower.transform.position = at2;
-        Builds.PlaceAt(at2, BuildingType.Tower);
+        Builds.PlaceAt(at2, BuildingType.House);
         return tower;
     }
-
     public Vector3 SnapToGrid(Vector3 at)
     {
         return Builds.Snap(at);

@@ -18,13 +18,12 @@ public class MouseHandler : MonoBehaviour
     {
         if (ghost != null)
         {
-            Plane ground = new Plane(Vector3.up, Vector3.zero);
+            Plane ground = new Plane(Vector3.up, Vector3.one * placer.PlaneHeight());
             Ray ray = Camera.main.ScreenPointToRay(InputSystem.actions["Point"].ReadValue<Vector2>());
 
             if (ground.Raycast(ray, out float enter))
             {
-                Vector3 hitPoint = ray.GetPoint(enter);
-                ghost.transform.position = hitPoint;
+                ghost.transform.position = placer.SnapToGrid(ray.GetPoint(enter));
             }
         }
     }
@@ -33,14 +32,16 @@ public class MouseHandler : MonoBehaviour
     {
         if (ghost != null && InputSystem.actions["Click"].IsPressed())
         {
-            Plane ground = new Plane(Vector3.up, Vector3.zero);
+            Plane ground = new Plane(Vector3.up, Vector3.one * placer.PlaneHeight());
             Ray ray = Camera.main.ScreenPointToRay(InputSystem.actions["Point"].ReadValue<Vector2>());
 
             if (ground.Raycast(ray, out float enter))
             {
                 Vector3 hitPoint = ray.GetPoint(enter);
-                placer.PlaceBuild(hitPoint);
-
+                if (placer.CanPlace(hitPoint))
+                {
+                    placer.PlaceBuild(hitPoint);
+                }
                 if (!InputSystem.actions["ShiftButton"].IsPressed())
                 {
                     // continuing building
