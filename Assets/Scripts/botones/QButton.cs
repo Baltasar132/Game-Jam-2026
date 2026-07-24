@@ -6,6 +6,7 @@ public class QButton : MonoBehaviour, IBuilderPlacer
     public static QButton INSTANCE;
     [SerializeField] private GameObject towerPrefab;
     [SerializeField] private GameObject ghostTowerPrefab;
+    private BuildingSize size = new BuildingSize(1);
 
     void Awake()
     {
@@ -35,16 +36,18 @@ public class QButton : MonoBehaviour, IBuilderPlacer
         GameObject tower = Instantiate(towerPrefab, Builds.GetGameObject().transform);
         tower.transform.position = at2;
         Builds.PlaceAt(at2, BuildingType.Tower);
+        Builds.NextID();
+        Builds.UpdateNavPoints(size.GetOuterPoints(at));
         return tower;
     }
 
     public Vector3 SnapToGrid(Vector3 at)
     {
-        return Builds.Snap(at);
+        return size.Snap(at);
     }
 
     public bool CanPlace(Vector3 at)
     {
-        return Builds.CanPlaceAt(at);
+        return size.CanPlace(at);
     }
 }

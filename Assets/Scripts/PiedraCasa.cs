@@ -51,6 +51,7 @@ public class PiedraCasa : MonoBehaviour, IInteractable
             new_worker2.spawnPoint = this.workerSpawnPoint;
             new_worker2.resourcePoint = this.stonePoint;
             new_worker2.type = Worker.WorkerType.Stone;
+            Workers.AddWorker(new_worker2);
         }
     }
 }

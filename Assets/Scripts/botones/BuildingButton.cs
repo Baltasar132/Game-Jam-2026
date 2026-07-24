@@ -2,21 +2,18 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class ZButton : MonoBehaviour, IBuilderPlacer
+public class BuildingButton : MonoBehaviour, IBuilderPlacer
 {
-    public static ZButton INSTANCE;
-    [SerializeField] private GameObject centerPrefab;
-    [SerializeField] private GameObject ghostCenterPrefab;
-    [SerializeField] private BuildingSize size = new BuildingSize(2);
-
-    void Awake()
-    {
-        INSTANCE = this;
-    }
+    [SerializeField] private GameObject buildingPrefab;
+    [SerializeField] private GameObject ghostBuildingPrefab;
+    [SerializeField] private BuildingSize size = new BuildingSize(1);
+    [SerializeField] private float height = 0.5f;
+    [SerializeField] private string ActionName;
+    [SerializeField] private BuildingType buildingType;
 
     void FixedUpdate()
     {
-        if (InputSystem.actions["ZButton"].IsPressed())
+        if (InputSystem.actions[ActionName].IsPressed())
         {
             Use();
         }
@@ -24,7 +21,7 @@ public class ZButton : MonoBehaviour, IBuilderPlacer
 
     void Use()
     {
-        MouseHandler.CreateGhost(this.ghostCenterPrefab, this);
+        MouseHandler.CreateGhost(this.ghostBuildingPrefab, this);
         // TODO: sound
     }
 
@@ -35,11 +32,11 @@ public class ZButton : MonoBehaviour, IBuilderPlacer
         //TODO: ResourceManager.SubRes(PriceManager.getWoodWorkerPrice());
         //TODO: ResourceManager.AddWorkers(ResType.Wood);
         //TODO: sound
-        GameObject tower = Instantiate(centerPrefab, Builds.GetGameObject().transform);
+        GameObject tower = Instantiate(buildingPrefab, Builds.GetGameObject().transform);
         tower.transform.position = pos0;
         foreach (var occ_pos in occuppying)
         {
-            Builds.PlaceAt(occ_pos, BuildingType.House);
+            Builds.PlaceAt(occ_pos, buildingType);
         }
         Builds.NextID();
         Builds.UpdateNavPoints(size.GetOuterPoints(at));
@@ -58,6 +55,7 @@ public class ZButton : MonoBehaviour, IBuilderPlacer
 
     public float PlaneHeight()
     {
-        return 1.0f;
+        return height;
     }
 }
+

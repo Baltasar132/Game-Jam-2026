@@ -44,7 +44,7 @@ public class MouseHandler : MonoBehaviour
                 }
                 if (!InputSystem.actions["ShiftButton"].IsPressed())
                 {
-                    // continuing building
+                    // stop building
                     RemoveGhost();
                 }
             }

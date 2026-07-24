@@ -50,6 +50,7 @@ public class MaderaCasa : MonoBehaviour, IInteractable
             new_worker2.spawnPoint = this.workerSpawnPoint;
             new_worker2.resourcePoint = this.treePoint;
             new_worker2.type = Worker.WorkerType.Wood;
+            Workers.AddWorker(new_worker2);
         }
     }
 }

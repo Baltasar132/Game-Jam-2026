@@ -6,6 +6,7 @@ public class EButton : MonoBehaviour, IBuilderPlacer
     public static EButton INSTANCE;
     [SerializeField] private GameObject housePrefab;
     [SerializeField] private GameObject ghostHousePrefab;
+    private BuildingSize size = new BuildingSize(1);
 
     void Awake()
     {
@@ -35,6 +36,8 @@ public class EButton : MonoBehaviour, IBuilderPlacer
         GameObject tower = Instantiate(housePrefab, Builds.GetGameObject().transform);
         tower.transform.position = at2;
         Builds.PlaceAt(at2, BuildingType.House);
+        Builds.NextID();
+        Builds.UpdateNavPoints(size.GetOuterPoints(at));
         return tower;
     }
     public Vector3 SnapToGrid(Vector3 at)
