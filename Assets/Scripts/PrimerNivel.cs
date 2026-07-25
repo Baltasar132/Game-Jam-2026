@@ -14,8 +14,10 @@ public class PrimerNivel : MonoBehaviour
         }
 
         BuildingButton.PlaceBuild(Vector3.zero, commandCenter, new(5), BuildingType.Center);
-        BuildingButton.PlaceBuild(new(15, 0, -15), treePrefab, new(1), BuildingType.Tree);
-        BuildingButton.PlaceBuild(new(18, 0, -15), treePrefab, new(1), BuildingType.Tree);
+        BuildingButton.Place(new(15, 0, -15), treePrefab, new(1), BuildingType.Tree);
+        BuildingButton.Place(new(18, 0, -15), treePrefab, new(1), BuildingType.Tree);
+        BuildingButton.Place(new(15, 0, -18), treePrefab, new(1), BuildingType.Tree);
+        BuildingButton.Place(new(18, 0, -18), treePrefab, new(1), BuildingType.Tree);
     }
 
     void FixedUpdate()

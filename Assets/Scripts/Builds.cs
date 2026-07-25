@@ -7,7 +7,6 @@ public class Builds : MonoBehaviour
     [SerializeField] private int width = 10;
     [SerializeField] private int height = 10;
     [SerializeField] private float cellWidth = 3;
-    private int currentId = 1;
 
     private static Builds INSTANCE;
     public List<BuildingType> buildings;
@@ -142,11 +141,6 @@ public class Builds : MonoBehaviour
     {
         Vector2Int vec = ToCoords(vector);
         PlaceAt(vec.x, vec.y, type);
-    }
-
-    public static void NextID()
-    {
-        INSTANCE.currentId += 1;
     }
 
     public static Vector3 GetClosest(Vector3 from)

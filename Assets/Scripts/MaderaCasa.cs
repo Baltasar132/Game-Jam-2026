@@ -47,7 +47,7 @@ public class MaderaCasa : MonoBehaviour, IInteractable
             GameObject new_worker = Instantiate(workerPrefab, workersParent);
             new_worker.transform.position = workerSpawnPoint.position;
             Worker new_worker2 = new_worker.GetComponent<Worker>();
-            new_worker2.spawnPoint = this.workerSpawnPoint;
+            new_worker2.returnPoint = this.workerSpawnPoint;
             new_worker2.resourcePoint = this.treePoint;
             new_worker2.type = Worker.WorkerType.Wood;
             Workers.AddWorker(new_worker2);

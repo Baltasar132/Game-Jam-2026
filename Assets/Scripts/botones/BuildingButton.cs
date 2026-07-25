@@ -25,27 +25,24 @@ public class BuildingButton : MonoBehaviour, IBuilderPlacer
         // TODO: sound
     }
 
-    public GameObject PlaceBuild(Vector3 at)
+    public void PlaceBuild(Vector3 at)
     {
-        Vector3 pos0 = SnapToGrid(at);
-        List<Vector3> occuppying = size.GetBuildingPoints(at);
         //TODO: ResourceManager.SubRes(PriceManager.getWoodWorkerPrice());
         //TODO: ResourceManager.AddWorkers(ResType.Wood);
         //TODO: sound
-        GameObject building = Instantiate(buildingPrefab, Builds.GetGameObject().transform);
-        BuildingImpl buildingImpl = building.GetComponentInChildren<BuildingImpl>();
-        buildingImpl.center = size.Center(at);
-        buildingImpl.size = size;
-        buildingImpl.placePoint = at;
+        PlaceBuild(at, buildingPrefab, size, buildingType);
+    }
+
+    public static void Place(Vector3 at, GameObject build, BuildingSize size, BuildingType type)
+    {
+        Vector3 pos0 = size.Snap(at);
+        List<Vector3> occuppying = size.GetBuildingPoints(at);
+        GameObject building = Instantiate(build, Builds.GetGameObject().transform);
         building.transform.position = pos0;
         foreach (var occ_pos in occuppying)
         {
-            Builds.PlaceAt(occ_pos, buildingType);
+            Builds.PlaceAt(occ_pos, type);
         }
-        Builds.NextID();
-        Builds.UpdateNavPoints(size.GetOuterPoints(at));
-
-        return building;
     }
 
     public static void PlaceBuild(Vector3 at, GameObject build, BuildingSize size, BuildingType type)
@@ -62,7 +59,6 @@ public class BuildingButton : MonoBehaviour, IBuilderPlacer
         {
             Builds.PlaceAt(occ_pos, type);
         }
-        Builds.NextID();
         Builds.UpdateNavPoints(size.GetOuterPoints(at));
     }
 

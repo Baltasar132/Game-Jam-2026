@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class Worker : MonoBehaviour
 {
-    public Transform spawnPoint;
+    public Transform returnPoint;
     public Transform resourcePoint;
     public Worker.WorkerType type;
 
@@ -62,12 +62,12 @@ public class Worker : MonoBehaviour
 
     public Vector3 GetGoal()
     {
-        return returning ? spawnPoint.position : resourcePoint.position;
+        return returning ? returnPoint.position : resourcePoint.position;
     }
 
     public Vector3 GetFrom()
     {
-        return returning ? resourcePoint.position : spawnPoint.position;
+        return returning ? resourcePoint.position : returnPoint.position;
     }
 
     public void ForcePathUpdate()
