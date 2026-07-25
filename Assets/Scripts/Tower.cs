@@ -1,16 +1,11 @@
 using UnityEngine;
 
-public class Tower : MonoBehaviour
+public class Tower : BuildingImpl
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
-    {
-        
-    }
+    [SerializeField] private float attackRange = 10.0f;
 
-    // Update is called once per frame
-    void Update()
+    public override void FixedUpdate2()
     {
-        
+        base.FixedUpdate2();
     }
 }

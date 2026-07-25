@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class InitCosas : MonoBehaviour
 {
@@ -12,6 +13,9 @@ public class InitCosas : MonoBehaviour
 
     void Update()
     {
-
+        if (InputSystem.actions["F1Button"].IsPressed())
+        {
+            Enemies.SpawnEnemyRandom();
+        }
     }
 }

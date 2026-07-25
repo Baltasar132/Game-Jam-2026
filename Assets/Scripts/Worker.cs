@@ -44,7 +44,7 @@ public class Worker : MonoBehaviour
                 path.RemoveAt(0);
             }
             Vector3 movement = (next - this.transform.position).normalized;
-            transform.Translate(movement * speed * Time.deltaTime, Space.World);
+            transform.Translate(movement * speed * Time.fixedDeltaTime, Space.World);
         }
 
         if (needsUpdate)

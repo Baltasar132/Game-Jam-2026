@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -12,18 +11,16 @@ public class Builds : MonoBehaviour
 
     private static Builds INSTANCE;
     public List<BuildingType> buildings;
-    public List<int> ids;
-    public List<Vector3> navPoints;
+    public List<(Vector3, int)> navPoints = new();
+    public List<Vector3> buildingPositions = new();
 
     void Awake()
     {
         INSTANCE = this;
         buildings = new(width * height);
-        ids = new(width * height);
         for (int i = 0; i < width * height; i++)
         {
             buildings.Add(BuildingType.None);
-            ids.Add(0);
         }
     }
 
@@ -96,11 +93,6 @@ public class Builds : MonoBehaviour
         return new Vector2Int(x, y);
     }
 
-    public static int GetIdAt(int x, int y)
-    {
-        return Get().ids[x + y * Get().width];
-    }
-
     public static BuildingType GetAt(int x, int y)
     {
         return Get().buildings[x + y * Get().width];
@@ -114,13 +106,6 @@ public class Builds : MonoBehaviour
     public static void PlaceAt(int x, int y, BuildingType type)
     {
         Get().buildings[x + y * Get().width] = type;
-        Get().ids[x + y * Get().width] = INSTANCE.currentId;
-    }
-
-    public static int GetIdAt(Vector2 vector)
-    {
-        Vector2Int vec = ToCoords(vector);
-        return GetIdAt(vec.x, vec.y);
     }
 
     public static BuildingType GetAt(Vector2 vector)
@@ -139,12 +124,6 @@ public class Builds : MonoBehaviour
     {
         Vector2Int vec = ToCoords(vector);
         PlaceAt(vec.x, vec.y, type);
-    }
-
-    public static int GetIdAt(Vector3 vector)
-    {
-        Vector2Int vec = ToCoords(vector);
-        return GetIdAt(vec.x, vec.y);
     }
 
     public static BuildingType GetAt(Vector3 vector)
@@ -170,27 +149,60 @@ public class Builds : MonoBehaviour
         INSTANCE.currentId += 1;
     }
 
+    public static Vector3 GetClosest(Vector3 from)
+    {
+        if (INSTANCE.buildingPositions.Count == 0)
+        {
+            return Vector3.zero;
+        }
+        Vector3 closest = INSTANCE.buildingPositions[0];
+        float distance = (closest - from).sqrMagnitude;
+        foreach (Vector3 pos in INSTANCE.buildingPositions)
+        {
+            float newDistance = (pos - from).sqrMagnitude;
+            if (newDistance < distance)
+            {
+                closest = pos;
+                distance = newDistance;
+            }
+        }
+        return closest;
+    }
+
     public static void UpdateNavPoints(List<Vector3> points)
     {
         foreach (Vector3 point in points)
         {
             bool found = false;
+            int foundIdx = 0;
 
-            foreach (Vector3 navPoint in INSTANCE.navPoints)
+            foreach (var tmp in INSTANCE.navPoints)
             {
+                Vector3 navPoint = tmp.Item1;
                 if ((navPoint - point).magnitude < GetCellWidth() / 2)
                 {
                     found = true;
                     break;
                 }
+                foundIdx += 1;
             }
 
             if (!found)
             {
-                INSTANCE.navPoints.Add(point);
+                INSTANCE.navPoints.Add((point, 1));
+            }
+            else
+            {
+                INSTANCE.navPoints[foundIdx] = (INSTANCE.navPoints[foundIdx].Item1, INSTANCE.navPoints[foundIdx].Item2 + 1);
             }
         }
         Workers.UpdateWorkerPaths(points);
+        Vector3 suma = Vector3.zero;
+        foreach (var item in points)
+        {
+            suma += item;
+        }
+        INSTANCE.buildingPositions.Add(suma / 4);
     }
 
     public static List<Vector3> GetPath(Vector3 fromVec, Vector3 toVec)
@@ -199,10 +211,11 @@ public class Builds : MonoBehaviour
         var openSet = new PriorityQueue<Vector3, float>();
         var gScore = new Dictionary<Vector3, float>();
         var cameFrom = new Dictionary<Vector3, Vector3>();
+        List<Vector3> points = INSTANCE.navPoints.ConvertAll((tuple) => tuple.Item1);
 
-        INSTANCE.navPoints.Add(fromVec);
-        INSTANCE.navPoints.Add(toVec);
-        foreach (Vector3 node in INSTANCE.navPoints)
+        points.Add(fromVec);
+        points.Add(toVec);
+        foreach (Vector3 node in points)
         {
             gScore[node] = float.PositiveInfinity;
         }
@@ -216,12 +229,10 @@ public class Builds : MonoBehaviour
 
             if (Vector3.SqrMagnitude(current - toVec) < 0.001f)
             {
-                INSTANCE.navPoints.Remove(fromVec);
-                INSTANCE.navPoints.Remove(toVec);
                 return ReconstructPath(cameFrom, current);
             }
 
-            foreach (Vector3 neighbor in GetNeighbors(current, GetCellWidth() * totalDistance))
+            foreach (Vector3 neighbor in GetNeighbors(points, current, GetCellWidth() * totalDistance))
             {
                 float distance = Vector3.Distance(current, neighbor);
                 float edgeCost = Mathf.Pow(distance, 1.5f);
@@ -241,10 +252,10 @@ public class Builds : MonoBehaviour
         return new();
     }
 
-    private static IEnumerable<Vector3> GetNeighbors(Vector3 current, float maxRadius)
+    private static IEnumerable<Vector3> GetNeighbors(List<Vector3> list, Vector3 current, float maxRadius)
     {
         float maxRadiusSqr = maxRadius * maxRadius;
-        foreach (Vector3 navPoint in INSTANCE.navPoints)
+        foreach (Vector3 navPoint in list)
         {
             if (navPoint == current) { continue; }
             if ((navPoint - current).sqrMagnitude <= maxRadiusSqr)
@@ -264,5 +275,57 @@ public class Builds : MonoBehaviour
         }
         path.Reverse();
         return path;
+    }
+
+    public static void RemoveBuilding(Vector3 center, Vector3 placePoint, BuildingSize size)
+    {
+        // remove from building positions
+        Vector3 closest = GetClosest(center);
+        INSTANCE.buildingPositions.Remove(closest);
+
+        // remove from building points
+        var points = size.GetBuildingPoints(placePoint);
+        foreach (var point in points)
+        {
+            PlaceAt(point, BuildingType.None);
+        }
+
+        // remove from navPoints (if orphan)
+        var outerPoints = size.GetOuterPoints(placePoint);
+        List<int> marked = new();
+        List<int> markedForDel = new();
+        foreach (var outer in outerPoints)
+        {
+            int idx = 0;
+            foreach (var navPoint in INSTANCE.navPoints)
+            {
+                if (outer == navPoint.Item1)
+                {
+                    // -1 to navpoint
+                    // if navpoint == 0, mark for deletion
+                    marked.Add(idx);
+                    if (navPoint.Item2 == 1)
+                    {
+                        markedForDel.Add(idx);
+                    }
+                    break;
+                }
+                idx += 1;
+            }
+        }
+        foreach (int idx in marked)
+        {
+            INSTANCE.navPoints[idx] = (INSTANCE.navPoints[idx].Item1, INSTANCE.navPoints[idx].Item2 - 1);
+        }
+
+        // i hate c#
+        var sortedIndices = markedForDel.OrderByDescending(i => i);
+        foreach (int index in sortedIndices)
+        {
+            if (index >= 0 && index < INSTANCE.navPoints.Count)
+            {
+                INSTANCE.navPoints.RemoveAt(index);
+            }
+        }
     }
 }
