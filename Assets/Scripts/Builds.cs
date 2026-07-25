@@ -72,7 +72,6 @@ public class Builds : MonoBehaviour
         int y = Mathf.RoundToInt(vector.y / Get().cellWidth) + Get().height / 2;
         if (x >= Get().width || y >= Get().height || x < 0 || y < 0)
         {
-            Debug.Log("Trying to get coords of " + vector + " for (" + Get().width + ", " + Get().height + "), width: " + Get().cellWidth);
             if (x >= Get().width)
             {
                 x = Get().width - 1;
@@ -391,5 +390,45 @@ public class Builds : MonoBehaviour
                 INSTANCE.navPoints.RemoveAt(index);
             }
         }
+    }
+
+    public static void PrintBuildings()
+    {
+        string text = "";
+        for (int i = 0; i < Get().height; i++)
+        {
+            for (int j = 0; j < Get().width; j++)
+            {
+                switch (GetAt(i, j))
+                {
+                    case BuildingType.None:
+                        text += " ";
+                        break;
+                    case BuildingType.Center:
+                        text += "C";
+                        break;
+                    case BuildingType.House:
+                        text += "H";
+                        break;
+                    case BuildingType.WoodHouse:
+                        text += "W";
+                        break;
+                    case BuildingType.StoneHouse:
+                        text += "S";
+                        break;
+                    case BuildingType.Tower:
+                        text += "T";
+                        break;
+                    case BuildingType.Tree:
+                        text += "3";
+                        break;
+                    case BuildingType.Stone:
+                        text += "1";
+                        break;
+                }
+            }
+            text += "\n";
+        }
+        print(text);
     }
 }

@@ -1058,6 +1058,15 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "RButton",
+                    "type": "Button",
+                    "id": "ab4bf4d5-033b-499f-bc4d-3eaa440bc1ce",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -1135,6 +1144,17 @@
                     "processors": "",
                     "groups": ";Keyboard&Mouse",
                     "action": "F1Button",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "288976ee-af0e-4138-bd15-b61fa2f60f54",
+                    "path": "<Keyboard>/r",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";Keyboard&Mouse",
+                    "action": "RButton",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

@@ -188,7 +188,7 @@ MonoBehaviour:
   centerOfBuilding: {x: 0, y: 0, z: 0}
   type: 0
   speed: 5
-  workDoneDistance: 0.2
+  workDoneDistance: 1
   needsUpdate: 1
   reunionRadius: 2
   returning: 0

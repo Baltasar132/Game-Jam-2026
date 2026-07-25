@@ -43,7 +43,7 @@ public class MaderaCasa : MonoBehaviour, IInteractable
     {
         if (PriceManager.getWoodWorkerPrice() <= ResourceManager.GetRes())
         {
-            Vector3 centerOfBuilding = this.transform.parent.position + new Vector3(Builds.GetCellWidth(), 0, Builds.GetCellWidth());
+            Vector3 centerOfBuilding = this.transform.parent.position + new Vector3(Builds.GetCellWidth() / 2, 0, Builds.GetCellWidth() / 2);
             Vector3? closestTree = Builds.GetClosestTree(centerOfBuilding);
             Vector3 spawningTowards = closestTree ?? new Vector3(-1000f, 0f, -1000f); // the fuck is ?? ?????? (vscode quickfix)
             Vector3 spawnPoint = centerOfBuilding + (spawningTowards - centerOfBuilding).normalized * reunionRadius * Builds.GetCellWidth();

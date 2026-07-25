@@ -33,12 +33,18 @@ public class BuildingButton : MonoBehaviour, IBuilderPlacer
         PlaceBuild(at, buildingPrefab, size, buildingType);
     }
 
-    public static void Place(Vector3 at, GameObject build, BuildingSize size, BuildingType type)
+    public static void Place(Vector3 at, GameObject build, BuildingSize size, BuildingType type, bool randomRotation)
     {
         Vector3 pos0 = size.Snap(at);
         List<Vector3> occuppying = size.GetBuildingPoints(at);
         GameObject building = Instantiate(build, Builds.GetGameObject().transform);
         building.transform.position = pos0;
+
+        if (randomRotation)
+        {
+            building.transform.Rotate(Vector3.up, Random.Range(0, 360));
+        }
+
         foreach (var occ_pos in occuppying)
         {
             Builds.PlaceAt(occ_pos, type);
