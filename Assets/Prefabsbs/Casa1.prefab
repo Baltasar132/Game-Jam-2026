@@ -46,6 +46,7 @@ GameObject:
   - component: {fileID: 7160090632817598253}
   - component: {fileID: 6670490128222552251}
   - component: {fileID: 515644269353570501}
+  - component: {fileID: 3389637828040397153}
   m_Layer: 0
   m_Name: Collider
   m_TagString: Untagged
@@ -173,6 +174,25 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 126
   m_CollisionDetection: 0
+--- !u!114 &3389637828040397153
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8762940632978081731}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3a7ea6b4f62fa6cf5b196a879dc80508, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::BuildingImpl
+  maxHealth: 20
+  currentHealth: 20
+  buildingRadius: 1
+  size:
+    size: 1
+  center: {x: 0, y: 0, z: 0}
+  placePoint: {x: 0, y: 0, z: 0}
 --- !u!1001 &8047398881227517619
 PrefabInstance:
   m_ObjectHideFlags: 0

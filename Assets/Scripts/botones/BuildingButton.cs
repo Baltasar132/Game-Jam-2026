@@ -32,15 +32,20 @@ public class BuildingButton : MonoBehaviour, IBuilderPlacer
         //TODO: ResourceManager.SubRes(PriceManager.getWoodWorkerPrice());
         //TODO: ResourceManager.AddWorkers(ResType.Wood);
         //TODO: sound
-        GameObject tower = Instantiate(buildingPrefab, Builds.GetGameObject().transform);
-        tower.transform.position = pos0;
+        GameObject building = Instantiate(buildingPrefab, Builds.GetGameObject().transform);
+        BuildingImpl buildingImpl = building.GetComponentInChildren<BuildingImpl>();
+        buildingImpl.center = size.Center(at);
+        buildingImpl.size = size;
+        buildingImpl.placePoint = at;
+        building.transform.position = pos0;
         foreach (var occ_pos in occuppying)
         {
             Builds.PlaceAt(occ_pos, buildingType);
         }
         Builds.NextID();
         Builds.UpdateNavPoints(size.GetOuterPoints(at));
-        return tower;
+
+        return building;
     }
 
     public Vector3 SnapToGrid(Vector3 at)

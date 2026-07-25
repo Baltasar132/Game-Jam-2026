@@ -30,7 +30,6 @@ public class BuildingSize
                 list.Add(vec + new Vector3(Builds.GetCellWidth() * i, 0, Builds.GetCellWidth() * j));
             }
         }
-        GetOuterPoints(vec);
         return list;
     }
 
@@ -57,5 +56,15 @@ public class BuildingSize
     public bool CanPlace(Vector3 at)
     {
         return GetBuildingPoints(at).All(Builds.CanPlaceAt);
+    }
+
+    public Vector3 Center(Vector3 at)
+    {
+        Vector3 suma = Vector3.zero;
+        foreach (var item in GetOuterPoints(at))
+        {
+            suma += item;
+        }
+        return suma / 4;
     }
 }
