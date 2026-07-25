@@ -48,6 +48,24 @@ public class BuildingButton : MonoBehaviour, IBuilderPlacer
         return building;
     }
 
+    public static void PlaceBuild(Vector3 at, GameObject build, BuildingSize size, BuildingType type)
+    {
+        Vector3 pos0 = size.Snap(at);
+        List<Vector3> occuppying = size.GetBuildingPoints(at);
+        GameObject building = Instantiate(build, Builds.GetGameObject().transform);
+        BuildingImpl buildingImpl = building.GetComponentInChildren<BuildingImpl>();
+        buildingImpl.center = size.Center(at);
+        buildingImpl.size = size;
+        buildingImpl.placePoint = at;
+        building.transform.position = pos0;
+        foreach (var occ_pos in occuppying)
+        {
+            Builds.PlaceAt(occ_pos, type);
+        }
+        Builds.NextID();
+        Builds.UpdateNavPoints(size.GetOuterPoints(at));
+    }
+
     public Vector3 SnapToGrid(Vector3 at)
     {
         return size.Snap(at);

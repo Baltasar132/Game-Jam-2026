@@ -1998,10 +1998,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: '::'
   resourcesVec:
-    wood: 0
-    stone: 0
-    gold: 0
-    ppl: 0
+    wood: 100
+    stone: 100
+    gold: 100
+    ppl: 100
   resLevels: 
   resWorkers: 
 --- !u!4 &1558413891

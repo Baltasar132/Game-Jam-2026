@@ -5,6 +5,7 @@ public class Enemy : MonoBehaviour, IHealthEnemy
     private readonly Collider[] hitBuffer = new Collider[16];
     public Vector3 closest = Vector3.zero;
     public float timer = 1.0f;
+    public float attackTimer = 1.0f;
     public float speed = 5.0F;
     public float maxHealth = 10f;
     public float currentHealth = 10f;
@@ -51,12 +52,23 @@ public class Enemy : MonoBehaviour, IHealthEnemy
 
         if (target != null)
         {
-            Vector3 movement = (target.GetPos() - transform.position).normalized;
-            transform.Translate(movement * (speed * Time.fixedDeltaTime), Space.World);
-
+            // or tries to attack or moves
             if ((target.GetPos() - transform.position).magnitude <= target.GetActionRadius() + this.enemyRadius + this.attackRange)
             {
-                target.DoDamage(this.damage);
+                // timer only ticks when can attack
+                attackTimer -= Time.fixedDeltaTime;
+                if (this.attackTimer <= 0.0f)
+                {
+                    attackTimer = 1.0f;
+                    target.DoDamage(this.damage);
+                }
+            }
+            else
+            {
+                // timer resets if cannot attack
+                attackTimer = 1.0f;
+                Vector3 movement = (target.GetPos() - transform.position).normalized;
+                transform.Translate(movement * (speed * Time.fixedDeltaTime), Space.World);
             }
         }
         else
