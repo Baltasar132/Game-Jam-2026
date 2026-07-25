@@ -5,6 +5,7 @@ public class ResourceManager : MonoBehaviour
 {
     public static ResourceManager INSTANCE;
 
+    private static readonly Collider[] hitBuffer = new Collider[16];
     public ResourcesVec resourcesVec = ResourcesVec.Zero();
     public List<int> resLevels = new List<int>();
     public List<int> resWorkers = new List<int>();
@@ -117,5 +118,61 @@ public class ResourceManager : MonoBehaviour
     public static void AddWorkers(ResType type)
     {
         INSTANCE.resWorkers[(int)type] += 1;
+    }
+
+    public static void ReduceWood(Vector3 where, float range)
+    {
+
+        int count = Physics.OverlapSphereNonAlloc(where, range, hitBuffer);
+
+        WoodSource nearest = null;
+        float minDistanceSqr = Mathf.Infinity;
+
+        for (int i = 0; i < count; i++)
+        {
+            if (hitBuffer[i].TryGetComponent<WoodSource>(out var woodSource))
+            {
+                float sqrDist = (hitBuffer[i].transform.parent.position - where).sqrMagnitude;
+
+                if (sqrDist < minDistanceSqr)
+                {
+                    minDistanceSqr = sqrDist;
+                    nearest = woodSource;
+                }
+            }
+        }
+
+        if (nearest != null)
+        {
+            nearest.quantity -= 1;
+        }
+    }
+
+    public static void ReduceStone(Vector3 where, float range)
+    {
+
+        int count = Physics.OverlapSphereNonAlloc(where, range, hitBuffer);
+
+        StoneSource nearest = null;
+        float minDistanceSqr = Mathf.Infinity;
+
+        for (int i = 0; i < count; i++)
+        {
+            if (hitBuffer[i].TryGetComponent<StoneSource>(out var stoneSource))
+            {
+                float sqrDist = (hitBuffer[i].transform.position - where).sqrMagnitude;
+
+                if (sqrDist < minDistanceSqr)
+                {
+                    minDistanceSqr = sqrDist;
+                    nearest = stoneSource;
+                }
+            }
+        }
+
+        if (nearest != null)
+        {
+            nearest.quantity -= 1;
+        }
     }
 }

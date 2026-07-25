@@ -416,6 +416,7 @@ GameObject:
   - component: {fileID: 1899408728389341071}
   - component: {fileID: 2091524268062804697}
   - component: {fileID: 8514433348449464697}
+  - component: {fileID: 2533965664141148582}
   m_Layer: 0
   m_Name: Body
   m_TagString: Untagged
@@ -529,11 +530,27 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9c5d9b443585ac45a82124c2a7c0740f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: '::'
-  menu: {fileID: 8615144162579928850}
   workerPrefab: {fileID: 6257812236455403986, guid: 13e1d938bd34f0ed99ab72aa63ad0a66, type: 3}
-  workerSpawnPoint: {fileID: 0}
-  workersParent: {fileID: 0}
-  stonePoint: {fileID: 0}
+  reunionRadius: 1
+--- !u!114 &2533965664141148582
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4072633993124530985}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3a7ea6b4f62fa6cf5b196a879dc80508, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::BuildingImpl
+  maxHealth: 50
+  currentHealth: 50
+  buildingRadius: 2
+  size:
+    size: 2
+  center: {x: 0, y: 0, z: 0}
+  placePoint: {x: 0, y: 0, z: 0}
 --- !u!1 &4741755038700670761
 GameObject:
   m_ObjectHideFlags: 0

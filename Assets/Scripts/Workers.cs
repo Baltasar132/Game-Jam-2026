@@ -47,4 +47,30 @@ public class Workers : MonoBehaviour
             worker.ForcePathUpdate();
         }
     }
+
+    public static void OnTreeRemoved(Vector3 where)
+    {
+        List<Worker> workers = INSTANCE.workers.Where(worker => worker.type == Worker.WorkerType.Wood).ToList();
+        foreach (Worker worker in workers)
+        {
+            if (worker.resourcePoint == where)
+            {
+                worker.UpdateResourcePoint();
+                worker.needsUpdate = true;
+            }
+        }
+    }
+
+    public static void OnStoneRemoved(Vector3 where)
+    {
+        List<Worker> workers = INSTANCE.workers.Where(worker => worker.type == Worker.WorkerType.Stone).ToList();
+        foreach (Worker worker in workers)
+        {
+            if (worker.resourcePoint == where)
+            {
+                worker.UpdateResourcePoint();
+                worker.needsUpdate = true;
+            }
+        }
+    }
 }

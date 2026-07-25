@@ -12,6 +12,8 @@ public class Builds : MonoBehaviour
     public List<BuildingType> buildings;
     public List<(Vector3, int)> navPoints = new();
     public List<Vector3> buildingPositions = new();
+    public List<Vector3> treePositions = new();
+    public List<Vector3> stonePositions = new();
 
     void Awake()
     {
@@ -163,16 +165,15 @@ public class Builds : MonoBehaviour
         return closest;
     }
 
-    public static Vector3? GetClosest(Vector3 from, BuildingType type)
+    public static Vector3? GetClosestTree(Vector3 from)
     {
-        List<Vector3> correctTypes = INSTANCE.buildingPositions.Where(pos => GetAt(pos) == type).ToList();
-        if (correctTypes.Count == 0)
+        if (INSTANCE.treePositions.Count == 0)
         {
             return null;
         }
-        Vector3 closest = correctTypes[0];
+        Vector3 closest = INSTANCE.treePositions[0];
         float distance = (closest - from).sqrMagnitude;
-        foreach (Vector3 pos in correctTypes)
+        foreach (Vector3 pos in INSTANCE.treePositions)
         {
             float newDistance = (pos - from).sqrMagnitude;
             if (newDistance < distance)
@@ -182,6 +183,54 @@ public class Builds : MonoBehaviour
             }
         }
         return closest;
+    }
+
+    public static Vector3? GetClosestStone(Vector3 from)
+    {
+        if (INSTANCE.stonePositions.Count == 0)
+        {
+            return null;
+        }
+        Vector3 closest = INSTANCE.stonePositions[0];
+        float distance = (closest - from).sqrMagnitude;
+        foreach (Vector3 pos in INSTANCE.stonePositions)
+        {
+            float newDistance = (pos - from).sqrMagnitude;
+            if (newDistance < distance)
+            {
+                closest = pos;
+                distance = newDistance;
+            }
+        }
+        return closest;
+    }
+
+    public static void AddTree(Vector3 pos)
+    {
+        INSTANCE.treePositions.Add(pos);
+    }
+
+    public static void AddStone(Vector3 pos)
+    {
+        INSTANCE.stonePositions.Add(pos);
+    }
+
+    public static void RemoveTree(Vector3 pos)
+    {
+        Vector3 closest = INSTANCE.treePositions
+                .OrderBy(t => (t - pos).sqrMagnitude)
+                .First();
+        INSTANCE.treePositions.Remove(closest);
+        Workers.OnTreeRemoved(closest);
+    }
+
+    public static void RemoveStone(Vector3 pos)
+    {
+        Vector3 closest = INSTANCE.stonePositions
+                .OrderBy(t => (t - pos).sqrMagnitude)
+                .First();
+        INSTANCE.stonePositions.Remove(closest);
+        Workers.OnStoneRemoved(closest);
     }
 
     public static void UpdateNavPoints(List<Vector3> points)

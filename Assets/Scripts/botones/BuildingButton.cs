@@ -42,6 +42,15 @@ public class BuildingButton : MonoBehaviour, IBuilderPlacer
         foreach (var occ_pos in occuppying)
         {
             Builds.PlaceAt(occ_pos, type);
+            switch (type)
+            {
+                case BuildingType.Tree:
+                    Builds.AddTree(occ_pos);
+                    break;
+                case BuildingType.Stone:
+                    Builds.AddStone(occ_pos);
+                    break;
+            }
         }
     }
 

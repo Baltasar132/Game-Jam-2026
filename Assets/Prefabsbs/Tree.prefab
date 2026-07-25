@@ -9,7 +9,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2186589429522608644}
-  - component: {fileID: 9152110925667441010}
   m_Layer: 0
   m_Name: Tree
   m_TagString: Untagged
@@ -34,20 +33,6 @@ Transform:
   - {fileID: 8038377566954418573}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &9152110925667441010
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7762952179670381348}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7dbf32069ec67c0ee9ee6b476025d368, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: '::'
-  radius: 1
-  quantity: 100
 --- !u!1 &9187190910982023414
 GameObject:
   m_ObjectHideFlags: 0
@@ -60,6 +45,7 @@ GameObject:
   - component: {fileID: 6672473433601388545}
   - component: {fileID: 5833608834503111385}
   - component: {fileID: 6067590056605143357}
+  - component: {fileID: 20064885073535140}
   m_Layer: 0
   m_Name: Sphere
   m_TagString: Untagged
@@ -160,6 +146,20 @@ SphereCollider:
   serializedVersion: 3
   m_Radius: 0.5
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &20064885073535140
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9187190910982023414}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7dbf32069ec67c0ee9ee6b476025d368, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: '::'
+  radius: 1
+  quantity: 100
 --- !u!1001 &3761750138655076460
 PrefabInstance:
   m_ObjectHideFlags: 0

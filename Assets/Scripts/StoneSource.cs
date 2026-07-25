@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class WoodSource : MonoBehaviour
+public class StoneSource : MonoBehaviour
 {
     public float radius = 1.0f;
     public int quantity = 100;
@@ -17,7 +17,7 @@ public class WoodSource : MonoBehaviour
         {
             // TODO: falling animation
             // TODO: update wood source node tree
-            Builds.RemoveTree(this.transform.parent.position);
+            Builds.RemoveStone(this.transform.parent.position);
             Destroy(this.transform.parent.gameObject, 0.2f);
             alive = false;
         }

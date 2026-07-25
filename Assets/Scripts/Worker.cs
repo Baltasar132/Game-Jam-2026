@@ -5,6 +5,7 @@ using UnityEngine;
 
 public class Worker : MonoBehaviour
 {
+    public Vector3 centerOfBuilding;
     public Vector3? returnPoint;
     public Vector3? resourcePoint;
     public Worker.WorkerType type;
@@ -13,6 +14,7 @@ public class Worker : MonoBehaviour
     [SerializeField] private float workDoneDistance = 2.0F;
     public bool needsUpdate = true;
     private List<Vector3> path = new();
+    [HideInInspector] public float reunionRadius;
 
     [HideInInspector] public bool returning = false;
 
@@ -32,9 +34,11 @@ public class Worker : MonoBehaviour
                 {
                     case WorkerType.Wood:
                         ResourceManager.AddWood(ResourceManager.GetLevel(ResType.Wood));
+                        ResourceManager.ReduceWood(this.transform.position, this.workDoneDistance + 2f);
                         break;
                     case WorkerType.Stone:
                         ResourceManager.AddStone(ResourceManager.GetLevel(ResType.Stone));
+                        ResourceManager.ReduceStone(this.transform.position, this.workDoneDistance + 0.5f);
                         break;
                 }
             }
@@ -95,6 +99,28 @@ public class Worker : MonoBehaviour
         if (path.Contains(from))
         {
             path.Remove(from);
+        }
+    }
+
+    public void UpdateResourcePoint()
+    {
+        switch (this.type)
+        {
+            case WorkerType.Wood:
+                Vector3? closestTree = Builds.GetClosestTree(centerOfBuilding);
+                Vector3 spawningTowards = closestTree ?? new Vector3(-1000f, 0f, -1000f);
+                Vector3 spawnPoint = centerOfBuilding + (spawningTowards - centerOfBuilding).normalized * reunionRadius * Builds.GetCellWidth();
+                this.resourcePoint = closestTree;
+                this.returnPoint = spawnPoint;
+                break;
+            case WorkerType.Stone:
+                Vector3? closestStone = Builds.GetClosestStone(centerOfBuilding);
+                Vector3 spawningTowards2 = closestStone ?? new Vector3(-1000f, 0f, -1000f);
+                Vector3 spawnPoint2 = centerOfBuilding + (spawningTowards2 - centerOfBuilding).normalized * reunionRadius * Builds.GetCellWidth();
+                this.resourcePoint = closestStone;
+                this.returnPoint = spawnPoint2;
+                break;
+
         }
     }
 
