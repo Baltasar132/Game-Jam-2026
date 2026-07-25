@@ -31,10 +31,15 @@ public class Workers : MonoBehaviour
     {
         foreach (Worker worker in GetWorkers())
         {
+            // if no goal, no update
+            if (worker.GetGoal() == null)
+            {
+                return;
+            }
             // if all points are far away, do not update (save on cpu)
             if (points.All((point) =>
             {
-                return (worker.transform.position - point).sqrMagnitude > (worker.transform.position - worker.GetGoal()).sqrMagnitude;
+                return (worker.transform.position - point).sqrMagnitude > (worker.transform.position - worker.GetGoal().Value).sqrMagnitude;
             }))
             {
                 return;

@@ -2,14 +2,15 @@ using UnityEngine;
 
 public class MaderaCasa : MonoBehaviour, IInteractable
 {
-    public GameObject menu;
+    private GameObject menu;
     [SerializeField] private GameObject workerPrefab;
-    [SerializeField] private Transform workerSpawnPoint;
-    [SerializeField] private Transform workersParent;
-    [SerializeField] private Transform treePoint;
+    [SerializeField] private float reunionRadius = 2.0f;
+    private Transform workersParent;
 
     void Start()
     {
+        menu = transform.GetChild(0).gameObject;
+        workersParent = Workers.INSTANCE.transform;
         menu.SetActive(false);
     }
 
@@ -42,13 +43,18 @@ public class MaderaCasa : MonoBehaviour, IInteractable
     {
         if (PriceManager.getWoodWorkerPrice() <= ResourceManager.GetRes())
         {
+            Vector3 centerOfBuilding = this.transform.parent.position + new Vector3(Builds.GetCellWidth(), 0, Builds.GetCellWidth());
+            Vector3? closestTree = Builds.GetClosest(centerOfBuilding, BuildingType.Tree);
+            Vector3 spawningTowards = closestTree.HasValue ? closestTree.Value : new Vector3(-1000f, 0f, -1000f);
+            Vector3 spawnPoint = centerOfBuilding + (spawningTowards - centerOfBuilding).normalized * reunionRadius * Builds.GetCellWidth();
+
             ResourceManager.SubRes(PriceManager.getWoodWorkerPrice());
             ResourceManager.AddWorkers(ResType.Wood);
             GameObject new_worker = Instantiate(workerPrefab, workersParent);
-            new_worker.transform.position = workerSpawnPoint.position;
+            new_worker.transform.position = spawnPoint;
             Worker new_worker2 = new_worker.GetComponent<Worker>();
-            new_worker2.returnPoint = this.workerSpawnPoint;
-            new_worker2.resourcePoint = this.treePoint;
+            new_worker2.returnPoint = spawnPoint;
+            new_worker2.resourcePoint = closestTree;
             new_worker2.type = Worker.WorkerType.Wood;
             Workers.AddWorker(new_worker2);
         }

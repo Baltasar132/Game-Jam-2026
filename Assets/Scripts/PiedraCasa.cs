@@ -4,12 +4,12 @@ public class PiedraCasa : MonoBehaviour, IInteractable
 {
     public GameObject menu;
     [SerializeField] private GameObject workerPrefab;
-    [SerializeField] private Transform workerSpawnPoint;
-    [SerializeField] private Transform workersParent;
-    [SerializeField] private Transform stonePoint;
+    [SerializeField] private float reunionRadius = 2.0f;
+    private Transform workersParent;
 
     void Start()
     {
+        workersParent = Workers.INSTANCE.transform;
         menu.SetActive(false);
     }
 
@@ -43,13 +43,19 @@ public class PiedraCasa : MonoBehaviour, IInteractable
     {
         if (PriceManager.getStoneWorkerPrice() <= ResourceManager.GetRes())
         {
+            Vector3? closestStone = Builds.GetClosest(this.transform.position, BuildingType.Stone);
+            Vector3 spawnPoint = closestStone.HasValue
+                ? this.transform.parent.position + (this.transform.parent.position - closestStone.Value).normalized * reunionRadius
+                : new Vector3(-1000f, 0f, -1000f);
+            ;
+
             ResourceManager.SubRes(PriceManager.getStoneWorkerPrice());
             ResourceManager.AddWorkers(ResType.Stone);
             GameObject new_worker = Instantiate(workerPrefab, workersParent);
-            new_worker.transform.position = workerSpawnPoint.position;
+            new_worker.transform.position = spawnPoint;
             Worker new_worker2 = new_worker.GetComponent<Worker>();
-            new_worker2.returnPoint = this.workerSpawnPoint;
-            new_worker2.resourcePoint = this.stonePoint;
+            new_worker2.returnPoint = spawnPoint;
+            new_worker2.resourcePoint = closestStone;
             new_worker2.type = Worker.WorkerType.Stone;
             Workers.AddWorker(new_worker2);
         }

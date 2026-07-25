@@ -386,6 +386,7 @@ GameObject:
   - component: {fileID: 5222169778172212754}
   - component: {fileID: 1912595509615885402}
   - component: {fileID: 261991073846881726}
+  - component: {fileID: 6027654958441646284}
   m_Layer: 0
   m_Name: Body
   m_TagString: Untagged
@@ -504,6 +505,25 @@ MonoBehaviour:
   workerSpawnPoint: {fileID: 0}
   workersParent: {fileID: 0}
   treePoint: {fileID: 0}
+--- !u!114 &6027654958441646284
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3151787416219395718}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3a7ea6b4f62fa6cf5b196a879dc80508, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::BuildingImpl
+  maxHealth: 50
+  currentHealth: 50
+  buildingRadius: 2
+  size:
+    size: 2
+  center: {x: 0, y: 0, z: 0}
+  placePoint: {x: 0, y: 0, z: 0}
 --- !u!1 &3706271765589795551
 GameObject:
   m_ObjectHideFlags: 0

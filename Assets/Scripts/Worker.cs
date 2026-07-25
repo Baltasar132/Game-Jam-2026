@@ -5,8 +5,8 @@ using UnityEngine;
 
 public class Worker : MonoBehaviour
 {
-    public Transform returnPoint;
-    public Transform resourcePoint;
+    public Vector3? returnPoint;
+    public Vector3? resourcePoint;
     public Worker.WorkerType type;
 
     public float speed = 5.0F;
@@ -18,6 +18,12 @@ public class Worker : MonoBehaviour
 
     void FixedUpdate()
     {
+        if (GetGoal() == null)
+        {
+            // if it doesn't have an objective, it doesn't even try to move
+            // philosophical, i know
+            return;
+        }
         if (path.Count == 0)
         {
             if (returning)
@@ -49,32 +55,43 @@ public class Worker : MonoBehaviour
 
         if (needsUpdate)
         {
-            Vector3 goal = GetGoal();
-            Vector3 from = GetFrom();
-            path = Builds.GetPath(from, goal);
-            if (path.Contains(from))
+            Vector3? goal = GetGoal();
+            Vector3? from = GetFrom();
+            if (from == null || goal == null)
             {
-                path.Remove(from);
+                // tbf, goal is never null at this point, but it just feels wrong to not include it
+                // and if from is null, i could use the workers position, but i'm lazy
+                return;
+            }
+            path = Builds.GetPath(from.Value, goal.Value);
+            if (path.Contains(from.Value))
+            {
+                path.Remove(from.Value);
             }
             needsUpdate = false;
         }
     }
 
-    public Vector3 GetGoal()
+    public Vector3? GetGoal()
     {
-        return returning ? returnPoint.position : resourcePoint.position;
+        return returning ? returnPoint : resourcePoint;
     }
 
-    public Vector3 GetFrom()
+    public Vector3? GetFrom()
     {
-        return returning ? resourcePoint.position : returnPoint.position;
+        return returning ? resourcePoint : returnPoint;
     }
 
+    // used to update the path of a moving worker, so that it doesn't crash into a building
     public void ForcePathUpdate()
     {
-        Vector3 goal = GetGoal();
+        Vector3? goal = GetGoal();
+        if (goal == null)
+        {
+            return;
+        }
         Vector3 from = this.transform.position;
-        path = Builds.GetPath(from, goal);
+        path = Builds.GetPath(from, goal.Value);
         if (path.Contains(from))
         {
             path.Remove(from);
