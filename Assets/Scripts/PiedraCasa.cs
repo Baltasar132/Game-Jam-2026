@@ -2,13 +2,14 @@ using UnityEngine;
 
 public class PiedraCasa : MonoBehaviour, IInteractable
 {
-    public GameObject menu;
+    private GameObject menu;
     [SerializeField] private GameObject workerPrefab;
     [SerializeField] private float reunionRadius = 2.0f;
     private Transform workersParent;
 
     void Start()
     {
+        menu = transform.GetChild(0).gameObject;
         workersParent = Workers.INSTANCE.transform;
         menu.SetActive(false);
     }
@@ -31,11 +32,10 @@ public class PiedraCasa : MonoBehaviour, IInteractable
         {
             ResourceManager.SubRes(PriceManager.getStoneLevelPrice());
             ResourceManager.AddLevel(ResType.Stone);
-            Debug.Log("Stoneworks upgraded");
         }
         else
         {
-            Debug.Log("Not enough money bruuuuuuh" + ResourceManager.GetRes() + " is less than " + PriceManager.getStoneLevelPrice());
+            // TODO: sound
         }
     }
 
@@ -43,11 +43,10 @@ public class PiedraCasa : MonoBehaviour, IInteractable
     {
         if (PriceManager.getStoneWorkerPrice() <= ResourceManager.GetRes())
         {
-            Vector3? closestStone = Builds.GetClosest(this.transform.position, BuildingType.Stone);
-            Vector3 spawnPoint = closestStone.HasValue
-                ? this.transform.parent.position + (this.transform.parent.position - closestStone.Value).normalized * reunionRadius
-                : new Vector3(-1000f, 0f, -1000f);
-            ;
+            Vector3 centerOfBuilding = this.transform.parent.position + new Vector3(Builds.GetCellWidth(), 0, Builds.GetCellWidth());
+            Vector3? closestStone = Builds.GetClosest(centerOfBuilding, BuildingType.Stone);
+            Vector3 spawningTowards = closestStone ?? new Vector3(-1000f, 0f, -1000f);
+            Vector3 spawnPoint = centerOfBuilding + (spawningTowards - centerOfBuilding).normalized * reunionRadius * Builds.GetCellWidth();
 
             ResourceManager.SubRes(PriceManager.getStoneWorkerPrice());
             ResourceManager.AddWorkers(ResType.Stone);
