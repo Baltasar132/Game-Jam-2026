@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3668557295299528471}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: GoblinGloboHolder
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -43,7 +43,7 @@ GameObject:
   - component: {fileID: 8074175877019928869}
   - component: {fileID: 6149173711274657783}
   - component: {fileID: 4271633199194456495}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Cube.004
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -137,7 +137,7 @@ GameObject:
   - component: {fileID: 7716594023554687125}
   - component: {fileID: 4468144019687868118}
   - component: {fileID: 6325318044259548379}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Cube.005
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -227,7 +227,7 @@ GameObject:
   m_Component:
   - component: {fileID: 285758479179763460}
   - component: {fileID: 8070380408289407210}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Goblin globo
   m_TagString: Untagged
   m_Icon: {fileID: 0}

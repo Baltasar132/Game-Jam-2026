@@ -188,6 +188,7 @@ MonoBehaviour:
   centerOfBuilding: {x: 0, y: 0, z: 0}
   type: 0
   speed: 10
+  rotationSpeed: 30
   workDoneDistance: 0
   pathNodeDoneDistance: 0.2
   needsPathUpdate: 1

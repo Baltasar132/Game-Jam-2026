@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 485847673440335173}
   - component: {fileID: 8551819660769815120}
   - component: {fileID: 8157646602155486563}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Goblin1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -126,7 +126,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7232223410391657082}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Goblin1Holder
   m_TagString: Untagged
   m_Icon: {fileID: 0}

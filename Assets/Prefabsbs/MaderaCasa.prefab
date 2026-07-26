@@ -500,7 +500,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bb369ebfe4350b26b985586cd3fc84c6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: '::'
-  workerPrefab: {fileID: 6257812236455403986, guid: 13e1d938bd34f0ed99ab72aa63ad0a66, type: 3}
+  workerPrefab: {fileID: 2431402738332649828, guid: 79326f9c8429b816d95dbfef68035a36, type: 3}
   reunionRadius: 1
 --- !u!114 &6027654958441646284
 MonoBehaviour:

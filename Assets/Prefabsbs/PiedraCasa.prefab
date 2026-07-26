@@ -530,7 +530,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9c5d9b443585ac45a82124c2a7c0740f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: '::'
-  workerPrefab: {fileID: 6257812236455403986, guid: 13e1d938bd34f0ed99ab72aa63ad0a66, type: 3}
+  workerPrefab: {fileID: 1475836970281220064, guid: 336f01be5875b3d578a9ea7b9bea03c8, type: 3}
   reunionRadius: 1
 --- !u!114 &2533965664141148582
 MonoBehaviour:

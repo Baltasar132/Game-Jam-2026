@@ -12,6 +12,7 @@ public class Worker : MonoBehaviour
     public Worker.WorkerType type;
 
     public float speed = 5.0F;
+    public float rotationSpeed = 30.0F;
     [SerializeField] private float workDoneDistance = 1.0F;
     [SerializeField] private float pathNodeDoneDistance = 0.2F;
     public bool needsPathUpdate = true;
@@ -82,6 +83,8 @@ public class Worker : MonoBehaviour
                 path.RemoveAt(0);
             }
             Vector3 movement = (next - this.transform.position).normalized;
+            Quaternion targetRotation = Quaternion.LookRotation(movement);
+            transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, rotationSpeed * Time.fixedDeltaTime);
             transform.Translate(movement * speed * Time.fixedDeltaTime, Space.World);
         }
 
