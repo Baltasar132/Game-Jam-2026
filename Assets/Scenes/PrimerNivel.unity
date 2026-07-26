@@ -316,6 +316,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 295928593}
+  - component: {fileID: 295928594}
   m_Layer: 0
   m_Name: PriceManager
   m_TagString: Untagged
@@ -338,6 +339,19 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &295928594
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 295928592}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ff8e89a884dd6dec1b39ed7d82084d5d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PriceManager
+  workerRange: 4
 --- !u!1 &633657933 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 3094465184788443338, guid: c55989440d9a4ca429b6c74e6fe91702, type: 3}

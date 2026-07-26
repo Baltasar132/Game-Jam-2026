@@ -58,7 +58,6 @@ public class Workers : MonoBehaviour
                 if (worker.resourcePoint.HasValue && Vector3.SqrMagnitude(worker.resourcePoint.Value - where) < 0.01f)
                 {
                     worker.UpdateResourcePoint();
-                    worker.needsUpdate = true;
                     break;
                 }
             }
@@ -76,7 +75,6 @@ public class Workers : MonoBehaviour
                 if (worker.resourcePoint.HasValue && Vector3.SqrMagnitude(worker.resourcePoint.Value - where) < 0.01f)
                 {
                     worker.UpdateResourcePoint();
-                    worker.needsUpdate = true;
                     break;
                 }
             }

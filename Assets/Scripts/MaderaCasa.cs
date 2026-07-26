@@ -11,17 +11,17 @@ public class MaderaCasa : MonoBehaviour, IInteractable
     {
         menu = transform.GetChild(0).gameObject;
         workersParent = Workers.INSTANCE.transform;
-        menu.SetActive(false);
+        menu?.SetActive(false);
     }
 
     void IInteractable.ShowUI()
     {
-        menu.SetActive(true);
+        menu?.SetActive(true);
     }
 
     void IInteractable.HideUI()
     {
-        menu.SetActive(false);
+        menu?.SetActive(false);
     }
 
     void IInteractable.Interact() { }

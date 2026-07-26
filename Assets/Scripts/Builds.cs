@@ -25,6 +25,9 @@ public class Builds : MonoBehaviour
     public static List<(Vector3, float)> Trees => INSTANCE.trees;
     public static List<(Vector3, float)> Stones => INSTANCE.stones;
 
+    public static List<Vector3> navPointsCache;
+    public static Dictionary<Vector2Int, List<int>> spatialGrid;
+
     void Awake()
     {
         INSTANCE = this;
@@ -278,9 +281,10 @@ public class Builds : MonoBehaviour
             suma += item;
         }
         INSTANCE.buildingPositions.Add(suma / 4);
+        BuildSpatialGrid(INSTANCE.navPoints.ConvertAll(p => p.Item1));
     }
 
-    public static List<Vector3> GetPath(Vector3 fromVec, Vector3 toVec)
+    public static List<Vector3> GetPath(Vector3 fromVec, Vector3 toVec, float searchRange)
     {
         float totalDistance = (fromVec - toVec).magnitude;
         var openSet = new PriorityQueue<Vector3, float>();
@@ -307,7 +311,7 @@ public class Builds : MonoBehaviour
                 return ReconstructPath(cameFrom, current);
             }
 
-            foreach (Vector3 neighbor in GetNeighbors(points, current, GetCellWidth() * totalDistance))
+            foreach (Vector3 neighbor in GetNeighbors(points, current, searchRange))
             {
                 float distance = Vector3.Distance(current, neighbor);
                 float edgeCost = Mathf.Pow(distance, 1.5f);
@@ -325,6 +329,50 @@ public class Builds : MonoBehaviour
         }
 
         return new();
+    }
+
+    public static List<Vector3> GetPath2(Vector3 fromVec, Vector3 toVec)
+    {
+        int fromIdx = FindNearestStaticPoint(fromVec);
+        int toIdx = FindNearestStaticPoint(toVec);
+
+        if (fromIdx == -1 || toIdx == -1)
+            return new List<Vector3>();
+
+        var gridPath = GetPathOnGrid(fromIdx, toIdx);
+        if (gridPath.Count == 0)
+            return new List<Vector3>();
+
+        var result = new List<Vector3>(gridPath.Count + 2);
+
+        result.Add(fromVec);
+
+        Vector3 snappedFrom = navPointsCache[fromIdx];
+        if (Vector3.SqrMagnitude(snappedFrom - fromVec) > 0.0001f)
+            result.Add(snappedFrom);
+
+        for (int i = 1; i < gridPath.Count - 1; i++)
+            result.Add(gridPath[i]);
+
+        Vector3 snappedTo = navPointsCache[toIdx];
+        if (Vector3.SqrMagnitude(snappedTo - toVec) > 0.0001f)
+            result.Add(snappedTo);
+
+        result.Add(toVec);
+
+        return result;
+    }
+
+    private static List<Vector3> ReconstructPath2(int[] cameFrom, int current, System.Func<int, Vector3> getPos)
+    {
+        var path = new List<Vector3>();
+        while (current != -1)
+        {
+            path.Add(getPos(current));
+            current = cameFrom[current];
+        }
+        path.Reverse();
+        return path;
     }
 
     private static IEnumerable<Vector3> GetNeighbors(List<Vector3> list, Vector3 current, float maxRadius)
@@ -402,6 +450,7 @@ public class Builds : MonoBehaviour
                 INSTANCE.navPoints.RemoveAt(index);
             }
         }
+        BuildSpatialGrid(INSTANCE.navPoints.ConvertAll(p => p.Item1));
     }
 
     public static void PrintBuildings()
@@ -452,5 +501,160 @@ public class Builds : MonoBehaviour
     public static int TreeAmount()
     {
         return INSTANCE.trees.Count;
+    }
+
+    private static void BuildSpatialGrid(List<Vector3> points)
+    {
+        navPointsCache = new List<Vector3>(points);
+        spatialGrid = new Dictionary<Vector2Int, List<int>>();
+
+        for (int i = 0; i < points.Count; i++)
+        {
+            var cell = ToCoords(points[i]);
+            if (!spatialGrid.TryGetValue(cell, out var list))
+            {
+                list = new List<int>();
+                spatialGrid[cell] = list;
+            }
+            list.Add(i);
+        }
+    }
+
+    private static IEnumerable<int> GetSpatialNeighbors(Vector3 pos, float radius)
+    {
+        int range = Mathf.CeilToInt(radius / CellWidth);
+        var center = ToCoords(pos);
+
+        for (int x = -range; x <= range; x++)
+        {
+            for (int z = -range; z <= range; z++)
+            {
+                var cell = new Vector2Int(center.x + x, center.y + z);
+                if (spatialGrid.TryGetValue(cell, out var indices))
+                {
+                    foreach (int idx in indices)
+                        yield return idx;
+                }
+            }
+        }
+    }
+
+    private static int FindNearestStaticPoint(Vector3 pos)
+    {
+        var centerCell = ToCoords(pos);
+        float bestDistSq = float.PositiveInfinity;
+        int bestIdx = -1;
+
+        for (int ring = 0; ; ring++)
+        {
+            for (int x = -ring; x <= ring; x++)
+            {
+                for (int z = -ring; z <= ring; z++)
+                {
+                    // Only check the perimeter of this ring (inner rings already checked)
+                    if (ring > 0 && Mathf.Abs(x) < ring && Mathf.Abs(z) < ring)
+                        continue;
+
+                    var cell = new Vector2Int(centerCell.x + x, centerCell.y + z);
+                    if (spatialGrid.TryGetValue(cell, out var indices))
+                    {
+                        foreach (int idx in indices)
+                        {
+                            float distSq = (navPointsCache[idx] - pos).sqrMagnitude;
+                            if (distSq < bestDistSq)
+                            {
+                                bestDistSq = distSq;
+                                bestIdx = idx;
+                            }
+                        }
+                    }
+                }
+            }
+
+            // Stop: anything beyond this ring is at least (ring+1)*cellSize away
+            if (bestIdx != -1 && ((ring + 1) * CellWidth) * ((ring + 1) * CellWidth) > bestDistSq)
+            {
+                break;
+            }
+
+            if (ring > 20) break; // safety
+        }
+
+        return bestIdx;
+    }
+
+    private static List<Vector3> GetPathOnGrid(int fromIdx, int toIdx)
+    {
+        if (fromIdx == toIdx)
+            return new List<Vector3> { navPointsCache[fromIdx] };
+
+        int nodeCount = navPointsCache.Count;
+        float[] gScore = new float[nodeCount];
+        int[] cameFrom = new int[nodeCount];
+        bool[] closedSet = new bool[nodeCount];
+
+        for (int i = 0; i < nodeCount; i++)
+        {
+            gScore[i] = float.PositiveInfinity;
+            cameFrom[i] = -1;
+        }
+
+        var openSet = new PriorityQueue<int, float>();
+        gScore[fromIdx] = 0f;
+
+        Vector3 toPos = navPointsCache[toIdx];
+        openSet.Enqueue(fromIdx, Vector3.Distance(navPointsCache[fromIdx], toPos));
+
+        float cellWidth = GetCellWidth();
+        float epsilon = 0.5f;
+
+        while (openSet.Count > 0)
+        {
+            int current = openSet.Dequeue();
+            if (closedSet[current]) continue;
+            closedSet[current] = true;
+
+            if (current == toIdx)
+                return ReconstructGridPath(cameFrom, toIdx);
+
+            Vector3 currentPos = navPointsCache[current];
+            float currentG = gScore[current];
+
+            foreach (int neighbor in GetSpatialNeighbors(currentPos, cellWidth * currentG))
+            {
+                if (closedSet[neighbor]) continue;
+
+                Vector3 neighborPos = navPointsCache[neighbor];
+                float distSq = (neighborPos - currentPos).sqrMagnitude;
+                float maxRadius = cellWidth * Vector3.Distance(currentPos, toPos);
+                if (distSq > maxRadius * maxRadius) continue;
+
+                float distance = Mathf.Sqrt(distSq);
+                float edgeCost = distance * Mathf.Sqrt(distance);
+                float tentativeG = currentG + edgeCost;
+
+                if (tentativeG < gScore[neighbor])
+                {
+                    cameFrom[neighbor] = current;
+                    gScore[neighbor] = tentativeG;
+                    float fScore = tentativeG + (epsilon * Vector3.Distance(neighborPos, toPos));
+                    openSet.Enqueue(neighbor, fScore);
+                }
+            }
+        }
+
+        return new();
+    }
+
+    private static List<Vector3> ReconstructGridPath(int[] cameFrom, int current)
+    {
+        var path = new List<Vector3>();
+        while (current != -1)
+        {
+            path.Add(navPointsCache[current]);
+            current = cameFrom[current];
+        }
+        path.Reverse();
+        return path;
     }
 }

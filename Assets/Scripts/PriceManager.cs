@@ -12,6 +12,10 @@ public class PriceManager : MonoBehaviour
 {
     public static PriceManager INSTANCE;
 
+    [SerializeField] private float workerRange = 10f;
+
+    public static float WorkerRange => INSTANCE.workerRange;
+
     void Awake()
     {
         INSTANCE = this;
