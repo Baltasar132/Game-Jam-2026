@@ -86,7 +86,7 @@ public class ResourcesVec
         sb.Append(stone);
         sb.Append("<sprite name=\"icon_stone\"> ");
         sb.Append(gold);
-        sb.Append("<sprite name=\"icon_steel\"> ");
+        sb.Append("<sprite name=\"goldbars\"> ");
         sb.Append(ppl);
         sb.Append("<sprite name=\"icon_ppl\">");
         return sb.ToString();
@@ -115,7 +115,7 @@ public class ResourcesVec
                 sb.Append(" ");
             }
             sb.Append(gold);
-            sb.Append("<sprite name=\"icon_steel\">");
+            sb.Append("<sprite name=\"goldbars\">");
         }
         if (ppl != 0)
         {
