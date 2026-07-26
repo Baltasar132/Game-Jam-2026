@@ -17,7 +17,8 @@ public class WaveManager : MonoBehaviour
 
     public static int MaxWaveId => INSTANCE.maxWaveId;
     public static int CurrentWaveId => INSTANCE.currentWaveIdx;
-    public static float Progress() => Mathf.Clamp01(INSTANCE.currentCountDown / INSTANCE.waves[CurrentWaveId].CountDown);
+    public static WaveData CurrentWave => INSTANCE.currentWave;
+    public static float Progress() => Mathf.Clamp01(INSTANCE.currentCountDown / CurrentWave.CountDown);
 
     void Awake()
     {
