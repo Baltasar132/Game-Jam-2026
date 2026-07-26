@@ -18,6 +18,16 @@ public class ResourcesVec
         this.ppl = ppl;
     }
 
+    public static ResourcesVec operator +(ResourcesVec l, ResourcesVec r)
+    {
+        return new(l.wood + r.wood, l.stone + r.stone, l.gold + r.gold, l.ppl + r.ppl);
+    }
+
+    public static ResourcesVec operator *(ResourcesVec l, int mul)
+    {
+        return new(l.wood * mul, l.stone * mul, l.gold * mul, l.ppl * mul);
+    }
+
     public static bool operator !=(ResourcesVec l, ResourcesVec r)
     {
         return l.wood != r.wood

@@ -144,24 +144,10 @@ public class ResourceManager : MonoBehaviour
 
         if (nearest != null)
         {
-            nearest.quantity -= 100; // GetLevel(ResType.Wood);
+            nearest.quantity -= GetLevel(ResType.Wood);
             return GetLevel(ResType.Wood);
         }
         {
-            //print("No se encontró árbol en " + where + " con " + Builds.StoneAmount() + " árboles");
-            //(Vector3 pos, float range) closest = default;
-            //float minSqrDist = float.MaxValue;
-            //
-            //foreach (var tree in Builds.Trees)
-            //{
-            //    float sqrDist = (tree.Item1 - where).sqrMagnitude;
-            //    if (sqrDist < minSqrDist)
-            //    {
-            //        minSqrDist = sqrDist;
-            //        closest = tree;
-            //    }
-            //}
-            //print("Más cercano: " + closest);
             return 0;
         }
     }
@@ -189,25 +175,11 @@ public class ResourceManager : MonoBehaviour
 
         if (nearest != null)
         {
-            nearest.quantity -= 1000; // GetLevel(ResType.Wood);
+            nearest.quantity -= GetLevel(ResType.Stone);
             return GetLevel(ResType.Stone);
         }
         else
         {
-            //print("No se encontró piedra en " + where + " con " + Builds.StoneAmount() + " piedras, a rango " + range);
-            //(Vector3 pos, float range) closest = default;
-            //float minSqrDist = float.MaxValue;
-            //
-            //foreach (var stone in Builds.Stones)
-            //{
-            //    float sqrDist = (stone.Item1 - where).sqrMagnitude;
-            //    if (sqrDist < minSqrDist)
-            //    {
-            //        minSqrDist = sqrDist;
-            //        closest = stone;
-            //    }
-            //}
-            //print("Más cercano: " + closest);
             return 0;
         }
     }

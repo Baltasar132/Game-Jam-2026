@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -11,6 +12,13 @@ public class BuildingButton : MonoBehaviour, IBuilderPlacer
     [SerializeField] private float height = 0.5f;
     [SerializeField] private string ActionName;
     [SerializeField] private BuildingType buildingType;
+    [SerializeField] private TextMeshProUGUI text;
+
+    void Start()
+    {
+        text = GetComponentInChildren<TextMeshProUGUI>();
+        text.fontSize = 18;
+    }
 
     void FixedUpdate()
     {
@@ -18,6 +26,7 @@ public class BuildingButton : MonoBehaviour, IBuilderPlacer
         {
             Use();
         }
+        text.SetText(ActionName + "\n" + buildingType + "\n" + PriceManager.GetBuildingCost(buildingType).ToStringTMP());
     }
 
     void Use()
@@ -28,9 +37,9 @@ public class BuildingButton : MonoBehaviour, IBuilderPlacer
 
     public void PlaceBuild(Vector3 at)
     {
-        //TODO: ResourceManager.SubRes(PriceManager.getWoodWorkerPrice());
-        //TODO: ResourceManager.AddWorkers(ResType.Wood);
         //TODO: sound
+        ResourceManager.SubRes(PriceManager.GetBuildingCost(buildingType));
+        PriceManager.AddBuilding(buildingType);
         PlaceBuild(at, buildingPrefab, size, buildingType);
     }
 
