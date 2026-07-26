@@ -12,13 +12,19 @@ public class WaveManager : MonoBehaviour
     [SerializeField] private List<WaveData> waves = new();
     [HideInInspector] public WaveData currentWave;
     [HideInInspector] public int currentWaveIdx = 0;
+    [HideInInspector] public int maxWaveId = 0;
     [HideInInspector] public float currentCountDown = 0;
+
+    public static int MaxWaveId => INSTANCE.maxWaveId;
+    public static int CurrentWaveId => INSTANCE.currentWaveIdx;
+    public static float Progress() => Mathf.Clamp01(INSTANCE.currentCountDown / INSTANCE.waves[CurrentWaveId].CountDown);
 
     void Awake()
     {
         INSTANCE = this;
         currentWave = waves[currentWaveIdx];
         currentCountDown = currentWave.CountDown;
+        maxWaveId = waves.Count - 1;
     }
 
     void FixedUpdate()
