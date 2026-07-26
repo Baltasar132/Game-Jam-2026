@@ -351,7 +351,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ff8e89a884dd6dec1b39ed7d82084d5d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PriceManager
-  workerRange: 4
+  workerRange: 10
   rawBuildingData:
   - type: 2
     cost:
@@ -733,17 +733,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: '::'
   waves:
-  - countDown: 1
-    enemyCount: 10
+  - countDown: 100
+    enemyCount: 0
     direction: 0
-  - countDown: 1
-    enemyCount: 20
+  - countDown: 100
+    enemyCount: 0
     direction: 0
-  - countDown: 1
-    enemyCount: 30
+  - countDown: 100
+    enemyCount: 0
     direction: 0
-  - countDown: 1
-    enemyCount: 50
+  - countDown: 100
+    enemyCount: 0
     direction: 0
   currentWave:
     countDown: 10
@@ -875,9 +875,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: '::'
   resourcesVec:
-    wood: 100
-    stone: 100
-    gold: 100
+    wood: 1000
+    stone: 1000
+    gold: 1000
     ppl: 100
   resLevels: 
   resWorkers: 
