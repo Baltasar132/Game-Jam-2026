@@ -4,7 +4,37 @@ public class Enemies : MonoBehaviour
 {
     public static Enemies INSTANCE;
     [SerializeField] private GameObject enemyPrefab;
+    [SerializeField] private GameObject goblin1Prefab;
+    [SerializeField] private GameObject goblin2Prefab;
+    [SerializeField] private GameObject globePrefab;
+    [SerializeField] private GameObject kingPrefab;
     [SerializeField] private float radius = 50f;
+
+    public static GameObject GetPrefab()
+    {
+        if (WaveManager.CurrentWaveId == WaveManager.MaxWaveId && Random.value < 0.1)
+        {
+            return INSTANCE.kingPrefab;
+        }
+
+        float rng = Random.value;
+
+        if (rng < 0.8)
+        {
+            // 80%
+            return INSTANCE.goblin1Prefab;
+        }
+        else if (rng < 0.9)
+        {
+            // 10%
+            return INSTANCE.goblin2Prefab;
+        }
+        else
+        {
+            // 10%
+            return INSTANCE.globePrefab;
+        }
+    }
 
     void Awake()
     {
@@ -26,7 +56,7 @@ public class Enemies : MonoBehaviour
 
     public static void SpawnEnemy(Vector3 at)
     {
-        GameObject newEnemy = Instantiate(INSTANCE.enemyPrefab, INSTANCE.gameObject.transform);
+        GameObject newEnemy = Instantiate(GetPrefab(), INSTANCE.gameObject.transform);
         newEnemy.transform.position = new(at.x, 0, at.z);
     }
 
