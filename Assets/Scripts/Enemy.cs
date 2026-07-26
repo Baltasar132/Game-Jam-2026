@@ -45,6 +45,11 @@ public class Enemy : MonoBehaviour, IHealthEnemy
 
     void FixedUpdate()
     {
+        if (currentHealth <= 0)
+        {
+            Destroy(this.gameObject);
+        }
+
         if (knockbackVelocity.sqrMagnitude > 0.001f)
         {
             transform.Translate(knockbackVelocity * Time.fixedDeltaTime, Space.World);

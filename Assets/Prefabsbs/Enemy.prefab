@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 8142535202109912034}
   - component: {fileID: 7601822016849177442}
   - component: {fileID: 5853891007813684221}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Body
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -150,7 +150,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5878712109664627709}
   - component: {fileID: -2360861966183862936}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Enemy
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -187,4 +187,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: '::'
   closest: {x: 0, y: 0, z: 0}
   timer: 1
+  attackTimer: 1
   speed: 5
+  maxHealth: 10
+  currentHealth: 10
+  enemyRadius: 1
+  buildingSearchRange: 2
+  attackRange: 0
+  damage: 2
+  knockbackForce: 5
+  knockbackDecay: 15

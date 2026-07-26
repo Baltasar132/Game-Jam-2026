@@ -355,15 +355,15 @@ MonoBehaviour:
   rawBuildingData:
   - type: 2
     cost:
-      wood: 1
-      stone: 1
-      gold: 1
-      ppl: 1
+      wood: 5
+      stone: 0
+      gold: 0
+      ppl: 0
     risingCost:
-      wood: 1
-      stone: 1
-      gold: 1
-      ppl: 1
+      wood: 5
+      stone: 0
+      gold: 0
+      ppl: 0
     count: 0
   - type: 1
     cost:
@@ -379,39 +379,39 @@ MonoBehaviour:
     count: 0
   - type: 3
     cost:
-      wood: 5
-      stone: 5
-      gold: 5
-      ppl: 5
+      wood: 0
+      stone: 0
+      gold: 20
+      ppl: 1
     risingCost:
-      wood: 5
-      stone: 5
-      gold: 5
-      ppl: 5
+      wood: 0
+      stone: 0
+      gold: 10
+      ppl: 0
     count: 0
   - type: 4
     cost:
-      wood: 5
-      stone: 5
-      gold: 5
-      ppl: 5
+      wood: 10
+      stone: 0
+      gold: 30
+      ppl: 1
     risingCost:
       wood: 5
-      stone: 5
-      gold: 5
-      ppl: 5
+      stone: 0
+      gold: 15
+      ppl: 0
     count: 0
   - type: 5
     cost:
-      wood: 5
-      stone: 5
-      gold: 5
-      ppl: 5
+      wood: 15
+      stone: 15
+      gold: 15
+      ppl: 2
     risingCost:
       wood: 5
       stone: 5
       gold: 5
-      ppl: 5
+      ppl: 0
     count: 0
 --- !u!1 &703170361
 GameObject:
@@ -1133,6 +1133,10 @@ PrefabInstance:
       propertyPath: m_text
       value: (R)
       objectReference: {fileID: 0}
+    - target: {fileID: 2612986858758506536, guid: c55989440d9a4ca429b6c74e6fe91702, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 800
+      objectReference: {fileID: 0}
     - target: {fileID: 3321543042192619742, guid: c55989440d9a4ca429b6c74e6fe91702, type: 3}
       propertyPath: m_LocalPosition.x
       value: 21.8674
@@ -1175,7 +1179,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3925805700533570643, guid: c55989440d9a4ca429b6c74e6fe91702, type: 3}
       propertyPath: m_text
-      value: 1 <sprite name=\"icon_wood\">
+      value: Recursos
       objectReference: {fileID: 0}
     - target: {fileID: 8975675062150997477, guid: c55989440d9a4ca429b6c74e6fe91702, type: 3}
       propertyPath: m_Name
