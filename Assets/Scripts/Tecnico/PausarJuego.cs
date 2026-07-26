@@ -1,6 +1,7 @@
 using UnityEngine;
 using TMPro;
 
+
 public class PauseGame : MonoBehaviour
 {
     public GameObject pauseText;
@@ -12,18 +13,16 @@ public class PauseGame : MonoBehaviour
         pauseText.SetActive(false);
     }
 
-    void Update()
+ 
+    public void Pause()
     {
-        if (Input.GetKeyDown(KeyCode.Escape))
-        {
-            Debug.Log("ESC");
-            paused = !paused;
+        pauseText.SetActive(true);
+        Time.timeScale = 0;
+    }
 
-            Time.timeScale = paused ? 0f : 1f;
-            pauseText.SetActive(paused);
-
-            Cursor.visible = paused;
-            Cursor.lockState = paused ? CursorLockMode.None : CursorLockMode.Locked;
-        }
+    public void Continue()
+    {
+        pauseText.SetActive(false);
+        Time.timeScale = 1;
     }
 }
