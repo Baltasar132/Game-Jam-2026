@@ -8,6 +8,10 @@ public class Builds : MonoBehaviour
     [SerializeField] private int width = 10;
     [SerializeField] private int height = 10;
     [SerializeField] private float cellWidth = 3;
+    // quick methods
+    public static int Width => INSTANCE.width;
+    public static int Height => INSTANCE.height;
+    public static float CellWidth => INSTANCE.cellWidth;
 
     private static Builds INSTANCE;
     public List<BuildingType> buildings;
