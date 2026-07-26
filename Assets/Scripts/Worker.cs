@@ -49,10 +49,10 @@ public class Worker : MonoBehaviour
                 switch (type)
                 {
                     case WorkerType.Wood:
-                        carryingResource = ResourceManager.ReduceWood(this.transform.position, this.workDoneDistance + 1f);
+                        carryingResource = ResourceManager.ReduceWood(this.transform.position, this.workDoneDistance + resourceRange);
                         break;
                     case WorkerType.Stone:
-                        carryingResource = ResourceManager.ReduceStone(this.transform.position, this.workDoneDistance + 1f);
+                        carryingResource = ResourceManager.ReduceStone(this.transform.position, this.workDoneDistance + resourceRange);
                         break;
                 }
             }

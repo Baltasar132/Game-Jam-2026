@@ -67,10 +67,10 @@ public class BuildingButton : MonoBehaviour, IBuilderPlacer
             switch (type)
             {
                 case BuildingType.Tree:
-                    Builds.AddTree(occ_pos, size.size * Builds.GetCellWidth() / 2);
+                    Builds.AddTree(occ_pos, size.size * Builds.GetCellWidth() / 2f);
                     break;
                 case BuildingType.Stone:
-                    Builds.AddStone(occ_pos, size.size * Builds.GetCellWidth() / 2);
+                    Builds.AddStone(occ_pos, size.size * Builds.GetCellWidth() / 2f);
                     break;
             }
         }

@@ -125,9 +125,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7dbf32069ec67c0ee9ee6b476025d368, type: 3}
   m_Name: 
   m_EditorClassIdentifier: '::'
-  radius: 1
+  size:
+    size: 1
   quantity: 150
   alive: 1
+  occupying: []
 --- !u!1 &8164893369180407191
 GameObject:
   m_ObjectHideFlags: 0

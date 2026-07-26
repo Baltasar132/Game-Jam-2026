@@ -8,10 +8,6 @@ public class Builds : MonoBehaviour
     [SerializeField] private int width = 10;
     [SerializeField] private int height = 10;
     [SerializeField] private float cellWidth = 3;
-    // quick methods
-    public static int Width => INSTANCE.width;
-    public static int Height => INSTANCE.height;
-    public static float CellWidth => INSTANCE.cellWidth;
 
     private static Builds INSTANCE;
     public List<BuildingType> buildings;
@@ -20,6 +16,14 @@ public class Builds : MonoBehaviour
     // (position, range)
     public List<(Vector3, float)> trees = new();
     public List<(Vector3, float)> stones = new();
+
+    // quick methods
+    public static int Width => INSTANCE.width;
+    public static int Height => INSTANCE.height;
+    public static float CellWidth => INSTANCE.cellWidth;
+    public static List<BuildingType> Buildings => INSTANCE.buildings;
+    public static List<(Vector3, float)> Trees => INSTANCE.trees;
+    public static List<(Vector3, float)> Stones => INSTANCE.stones;
 
     void Awake()
     {

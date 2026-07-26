@@ -159,7 +159,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: '::'
   size:
-    size: 0
+    size: 1
   quantity: 300
   alive: 1
   occupying: []
