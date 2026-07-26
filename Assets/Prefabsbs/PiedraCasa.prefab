@@ -573,6 +573,8 @@ MonoBehaviour:
     size: 2
   center: {x: 0, y: 0, z: 0}
   placePoint: {x: 0, y: 0, z: 0}
+  type: 4
+  AnimationHolder: {fileID: 0}
 --- !u!135 &239767780897361208
 SphereCollider:
   m_ObjectHideFlags: 0

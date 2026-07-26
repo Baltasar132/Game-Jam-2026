@@ -1,4 +1,6 @@
+using System.Collections;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class BuildingImpl : MonoBehaviour, IHealthBuilding
 {
@@ -8,11 +10,19 @@ public class BuildingImpl : MonoBehaviour, IHealthBuilding
     [SerializeField] public BuildingSize size = new(1);
     [SerializeField] public Vector3 center;
     [SerializeField] public Vector3 placePoint;
+    [SerializeField] public BuildingType type;
+    [SerializeField] public GameObject AnimationHolder;
 
     public void FixedUpdate()
     {
         if (this.currentHealth <= 0.0f)
         {
+            if (type == BuildingType.Center)
+            {
+                StartCoroutine(StartGameSeq());
+                AnimationHolder.SetActive(true);
+                return;
+            }
             Destroy(this.transform.parent.gameObject);
             Builds.RemoveBuilding(center, placePoint, size);
         }
@@ -47,5 +57,12 @@ public class BuildingImpl : MonoBehaviour, IHealthBuilding
     public Vector3 GetPos()
     {
         return this.GetComponentInParent<Transform>().position;
+    }
+
+
+    static IEnumerator StartGameSeq()
+    {
+        yield return new WaitForSeconds(2f);
+        SceneManager.LoadScene("PantallaDerrota");
     }
 }

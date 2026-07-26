@@ -112,6 +112,8 @@ MonoBehaviour:
     size: 1
   center: {x: 0, y: 0, z: 0}
   placePoint: {x: 0, y: 0, z: 0}
+  type: 5
+  AnimationHolder: {fileID: 0}
   attackRange: 10
   attackCooldown: 0.5
   damage: 10
