@@ -2,9 +2,10 @@ using System.Collections.Generic;
 using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 
-public class BuildingButton : MonoBehaviour, IBuilderPlacer
+public class BuildingButton : MonoBehaviour, IBuilderPlacer, IPointerEnterHandler, IPointerExitHandler
 {
     [SerializeField] private GameObject buildingPrefab;
     [SerializeField] private GameObject ghostBuildingPrefab;
@@ -12,7 +13,10 @@ public class BuildingButton : MonoBehaviour, IBuilderPlacer
     [SerializeField] private float height = 0.5f;
     [SerializeField] private string ActionName;
     [SerializeField] private BuildingType buildingType;
-    [SerializeField] private TextMeshProUGUI text;
+    [HideInInspector] private TextMeshProUGUI text;
+
+    [TextArea(2, 5)]
+    [SerializeField] private string tooltipContent;
 
     void Start()
     {
@@ -34,7 +38,7 @@ public class BuildingButton : MonoBehaviour, IBuilderPlacer
         return buildingType;
     }
 
-    void Use()
+    public void Use()
     {
         MouseHandler.CreateGhost(this.ghostBuildingPrefab, this);
         // TODO: sound
@@ -120,6 +124,24 @@ public class BuildingButton : MonoBehaviour, IBuilderPlacer
     public float PlaneHeight()
     {
         return height;
+    }
+
+    public void OnPointerEnter(PointerEventData eventData)
+    {
+        TooltipUI.INSTANCE.Show(tooltipContent);
+    }
+
+    public void OnPointerExit(PointerEventData eventData)
+    {
+        TooltipUI.INSTANCE.Hide();
+    }
+
+    private void OnDisable()
+    {
+        if (TooltipUI.INSTANCE != null)
+        {
+            TooltipUI.INSTANCE.Hide();
+        }
     }
 }
 

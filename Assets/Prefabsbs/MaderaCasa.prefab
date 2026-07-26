@@ -114,6 +114,7 @@ GameObject:
   - component: {fileID: 3056293559505805604}
   - component: {fileID: 5320998414613614506}
   - component: {fileID: 4247221050249891377}
+  - component: {fileID: 8461391362521849483}
   m_Layer: 5
   m_Name: UpgradeMadera
   m_TagString: Untagged
@@ -195,8 +196,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 24
-  m_fontSizeBase: 24
+  m_fontSize: 12
+  m_fontSizeBase: 12
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -240,6 +241,20 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!114 &8461391362521849483
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2497675987799317657}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 32cc3d6895859d0ada7bb337dd8bc006, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::UpgradeTextThingy
+  upgrade: 1
+  text: {fileID: 0}
 --- !u!1 &2903642161267449557
 GameObject:
   m_ObjectHideFlags: 0
@@ -252,6 +267,7 @@ GameObject:
   - component: {fileID: 7260484632373657909}
   - component: {fileID: 105629921640502543}
   - component: {fileID: 5935601359061747627}
+  - component: {fileID: 926066916023011455}
   m_Layer: 5
   m_Name: Worker
   m_TagString: Untagged
@@ -373,6 +389,19 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+--- !u!114 &926066916023011455
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2903642161267449557}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1ffd770061ad259b1bccdd7f9ced24ba, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::BasicTooltiper
+  tooltipContent: Creates a lumberjack (-1 <sprite name="icon_ppl">)
 --- !u!1 &3151787416219395718
 GameObject:
   m_ObjectHideFlags: 0
@@ -615,7 +644,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 0}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -642,6 +671,7 @@ GameObject:
   - component: {fileID: 1624510466036250636}
   - component: {fileID: 4269865405112587813}
   - component: {fileID: 6623934551998205128}
+  - component: {fileID: 3973051087634177182}
   m_Layer: 5
   m_Name: WorkerMadera
   m_TagString: Untagged
@@ -723,8 +753,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 24
-  m_fontSizeBase: 24
+  m_fontSize: 12
+  m_fontSizeBase: 12
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -768,6 +798,20 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!114 &3973051087634177182
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6688222590937485626}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 32cc3d6895859d0ada7bb337dd8bc006, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::UpgradeTextThingy
+  upgrade: 3
+  text: {fileID: 0}
 --- !u!1 &8968493414549552376
 GameObject:
   m_ObjectHideFlags: 0
@@ -780,6 +824,7 @@ GameObject:
   - component: {fileID: 3952772001608002350}
   - component: {fileID: 802452332887218550}
   - component: {fileID: 4922952826373962044}
+  - component: {fileID: 2753355855260828618}
   m_Layer: 5
   m_Name: Upgrade
   m_TagString: Untagged
@@ -901,6 +946,19 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+--- !u!114 &2753355855260828618
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8968493414549552376}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1ffd770061ad259b1bccdd7f9ced24ba, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::BasicTooltiper
+  tooltipContent: Upgrades wood recollection rate (+1 <sprite name="icon_wood">)
 --- !u!1001 &3989545315064104797
 PrefabInstance:
   m_ObjectHideFlags: 0

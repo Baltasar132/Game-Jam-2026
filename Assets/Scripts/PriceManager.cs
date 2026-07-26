@@ -53,7 +53,7 @@ public class PriceManager : MonoBehaviour
     }
     public static ResourcesVec getStoneWorkerPrice()
     {
-        return ResourcesVec.Zero().AddStone((ResourceManager.GetWorkers(ResType.Wood) + 1) * 10);
+        return ResourcesVec.Zero().AddStone((ResourceManager.GetWorkers(ResType.Stone) + 1) * 10);
     }
 
     public static bool CanExpend(ResourcesVec res)
