@@ -120,7 +120,7 @@ public class ResourceManager : MonoBehaviour
         INSTANCE.resWorkers[(int)type] += 1;
     }
 
-    public static void ReduceWood(Vector3 where, float range)
+    public static int ReduceWood(Vector3 where, float range)
     {
         int count = Physics.OverlapSphereNonAlloc(where, range, hitBuffer, 1 << 10);
 
@@ -143,14 +143,16 @@ public class ResourceManager : MonoBehaviour
 
         if (nearest != null)
         {
-            nearest.quantity -= 100;
+            nearest.quantity -= 100; // GetLevel(ResType.Wood);
+            return GetLevel(ResType.Wood);
         }
         {
             print("No se encontró árbol en " + where + " con " + Builds.StoneAmount() + " árboles");
+            return 0;
         }
     }
 
-    public static void ReduceStone(Vector3 where, float range)
+    public static int ReduceStone(Vector3 where, float range)
     {
         int count = Physics.OverlapSphereNonAlloc(where, range, hitBuffer, 1 << 9);
 
@@ -173,11 +175,13 @@ public class ResourceManager : MonoBehaviour
 
         if (nearest != null)
         {
-            nearest.quantity -= 1000;
+            nearest.quantity -= 1000; // GetLevel(ResType.Wood);
+            return GetLevel(ResType.Stone);
         }
         else
         {
             print("No se encontró piedra en " + where + " con " + Builds.StoneAmount() + " piedras");
+            return 0;
         }
     }
 }

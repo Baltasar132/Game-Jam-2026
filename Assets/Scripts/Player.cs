@@ -6,8 +6,6 @@ public class Player : MonoBehaviour
     public float speed = 5f, rotationSpeed = 10f;
     public Animator animator;
 
-    
-
     void FixedUpdate()
     {
         Vector2 input = InputSystem.actions["Move"].ReadValue<Vector2>();
@@ -20,5 +18,5 @@ public class Player : MonoBehaviour
         animator.SetBool("Running", movement != Vector3.zero);
     }
 
-    
+
 }

@@ -19,6 +19,7 @@ public class Worker : MonoBehaviour
 
     [HideInInspector] public bool returning = false;
     [HideInInspector] public float resourceRange;
+    [HideInInspector] public int carryingResource;
 
     void FixedUpdate()
     {
@@ -35,22 +36,23 @@ public class Worker : MonoBehaviour
                 switch (type)
                 {
                     case WorkerType.Wood:
-                        ResourceManager.AddWood(ResourceManager.GetLevel(ResType.Wood));
+                        ResourceManager.AddWood(carryingResource);
                         break;
                     case WorkerType.Stone:
-                        ResourceManager.AddStone(ResourceManager.GetLevel(ResType.Stone));
+                        ResourceManager.AddStone(carryingResource);
                         break;
                 }
+                carryingResource = 0;
             }
             else
             {
                 switch (type)
                 {
                     case WorkerType.Wood:
-                        ResourceManager.ReduceWood(this.transform.position, this.workDoneDistance + 1f);
+                        carryingResource = ResourceManager.ReduceWood(this.transform.position, this.workDoneDistance + 1f);
                         break;
                     case WorkerType.Stone:
-                        ResourceManager.ReduceStone(this.transform.position, this.workDoneDistance + 1f);
+                        carryingResource = ResourceManager.ReduceStone(this.transform.position, this.workDoneDistance + 1f);
                         break;
                 }
             }

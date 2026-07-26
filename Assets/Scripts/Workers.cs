@@ -69,13 +69,8 @@ public class Workers : MonoBehaviour
     {
         List<Worker> workers = INSTANCE.workers.Where(worker => worker.type == Worker.WorkerType.Stone).ToList();
 
-        foreach (var item in wheres)
-        {
-            print("Quitando: " + item);
-        }
         foreach (Worker worker in workers)
         {
-            print("Para el worker" + worker.resourcePoint);
             foreach (var where in wheres)
             {
                 if (worker.resourcePoint.HasValue && Vector3.SqrMagnitude(worker.resourcePoint.Value - where) < 0.01f)
