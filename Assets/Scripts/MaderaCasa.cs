@@ -11,17 +11,17 @@ public class MaderaCasa : MonoBehaviour, IInteractable
     {
         menu = transform.GetChild(0).gameObject;
         workersParent = Workers.INSTANCE.transform;
-        menu.SetActive(false);
+        menu?.SetActive(false);
     }
 
     void IInteractable.ShowUI()
     {
-        menu.SetActive(true);
+        menu?.SetActive(true);
     }
 
     void IInteractable.HideUI()
     {
-        menu.SetActive(false);
+        menu?.SetActive(false);
     }
 
     void IInteractable.Interact() { }
@@ -44,8 +44,8 @@ public class MaderaCasa : MonoBehaviour, IInteractable
         if (PriceManager.getWoodWorkerPrice() <= ResourceManager.GetRes())
         {
             Vector3 centerOfBuilding = this.transform.parent.position + new Vector3(Builds.GetCellWidth() / 2, 0, Builds.GetCellWidth() / 2);
-            Vector3? closestTree = Builds.GetClosestTree(centerOfBuilding);
-            Vector3 spawningTowards = closestTree ?? new Vector3(-1000f, 0f, -1000f); // the fuck is ?? ?????? (vscode quickfix)
+            (Vector3?, float) closestTree = Builds.GetClosestTree(centerOfBuilding);
+            Vector3 spawningTowards = closestTree.Item1 ?? new Vector3(-1000f, 0f, -1000f);
             Vector3 spawnPoint = centerOfBuilding + (spawningTowards - centerOfBuilding).normalized * reunionRadius * Builds.GetCellWidth();
 
             ResourceManager.SubRes(PriceManager.getWoodWorkerPrice());
@@ -54,10 +54,11 @@ public class MaderaCasa : MonoBehaviour, IInteractable
             new_worker.transform.position = spawnPoint;
             Worker new_worker2 = new_worker.GetComponent<Worker>();
             new_worker2.returnPoint = spawnPoint;
-            new_worker2.resourcePoint = closestTree;
+            new_worker2.resourcePoint = closestTree.Item1;
             new_worker2.type = Worker.WorkerType.Wood;
             new_worker2.centerOfBuilding = centerOfBuilding;
             new_worker2.reunionRadius = reunionRadius;
+            new_worker2.resourceRange = closestTree.Item2;
             Workers.AddWorker(new_worker2);
         }
     }

@@ -14,6 +14,10 @@ public class Enemy : MonoBehaviour, IHealthEnemy
     public float attackRange = 0.0f;
     public float damage = 2.0f;
 
+    [SerializeField] private float knockbackForce = 5.0f;
+    [SerializeField] private float knockbackDecay = 15.0f;
+    private Vector3 knockbackVelocity = Vector3.zero;
+
     public void DoDamage(float damage)
     {
         this.currentHealth -= damage;
@@ -41,6 +45,18 @@ public class Enemy : MonoBehaviour, IHealthEnemy
 
     void FixedUpdate()
     {
+        if (currentHealth <= 0)
+        {
+            Destroy(this.gameObject);
+        }
+
+        if (knockbackVelocity.sqrMagnitude > 0.001f)
+        {
+            transform.Translate(knockbackVelocity * Time.fixedDeltaTime, Space.World);
+            knockbackVelocity = Vector3.Lerp(knockbackVelocity, Vector3.zero, knockbackDecay * Time.fixedDeltaTime);
+            return;
+        }
+
         timer -= Time.fixedDeltaTime;
         if (timer <= 0)
         {
@@ -52,15 +68,20 @@ public class Enemy : MonoBehaviour, IHealthEnemy
 
         if (target != null)
         {
+            float sqrDistance = (target.GetPos() - transform.position).sqrMagnitude;
+            float attackRadiusSum = target.GetActionRadius() + this.enemyRadius + this.attackRange;
             // or tries to attack or moves
-            if ((target.GetPos() - transform.position).magnitude <= target.GetActionRadius() + this.enemyRadius + this.attackRange)
+            if (sqrDistance <= attackRadiusSum * attackRadiusSum)
             {
                 // timer only ticks when can attack
                 attackTimer -= Time.fixedDeltaTime;
                 if (this.attackTimer <= 0.0f)
                 {
+                    // TODO: attack sound
                     attackTimer = 1.0f;
                     target.DoDamage(this.damage);
+                    Vector3 knockbackDir = (transform.position - target.GetPos()).normalized;
+                    knockbackVelocity = knockbackDir * knockbackForce;
                 }
             }
             else

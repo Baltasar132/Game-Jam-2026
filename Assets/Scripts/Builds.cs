@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class Builds : MonoBehaviour
@@ -8,12 +9,29 @@ public class Builds : MonoBehaviour
     [SerializeField] private int height = 10;
     [SerializeField] private float cellWidth = 3;
 
+    public static float MinX => -Width * CellWidth / 2;
+    public static float MaxX => Width * CellWidth / 2;
+    public static float MinZ => -Height * CellWidth / 2;
+    public static float MaxZ => Height * CellWidth / 2;
+
     private static Builds INSTANCE;
     public List<BuildingType> buildings;
     public List<(Vector3, int)> navPoints = new();
     public List<Vector3> buildingPositions = new();
-    public List<Vector3> treePositions = new();
-    public List<Vector3> stonePositions = new();
+    // (position, range)
+    public List<(Vector3, float)> trees = new();
+    public List<(Vector3, float)> stones = new();
+
+    // quick methods
+    public static int Width => INSTANCE.width;
+    public static int Height => INSTANCE.height;
+    public static float CellWidth => INSTANCE.cellWidth;
+    public static List<BuildingType> Buildings => INSTANCE.buildings;
+    public static List<(Vector3, float)> Trees => INSTANCE.trees;
+    public static List<(Vector3, float)> Stones => INSTANCE.stones;
+
+    public static List<Vector3> navPointsCache;
+    public static Dictionary<Vector2Int, List<int>> spatialGrid;
 
     void Awake()
     {
@@ -164,17 +182,17 @@ public class Builds : MonoBehaviour
         return closest;
     }
 
-    public static Vector3? GetClosestTree(Vector3 from)
+    public static (Vector3?, float) GetClosestTree(Vector3 from)
     {
-        if (INSTANCE.treePositions.Count == 0)
+        if (INSTANCE.trees.Count == 0)
         {
-            return null;
+            return (null, 0f);
         }
-        Vector3 closest = INSTANCE.treePositions[0];
-        float distance = (closest - from).sqrMagnitude;
-        foreach (Vector3 pos in INSTANCE.treePositions)
+        (Vector3, float) closest = INSTANCE.trees[0];
+        float distance = (closest.Item1 - from).sqrMagnitude;
+        foreach ((Vector3, float) pos in INSTANCE.trees)
         {
-            float newDistance = (pos - from).sqrMagnitude;
+            float newDistance = (pos.Item1 - from).sqrMagnitude;
             if (newDistance < distance)
             {
                 closest = pos;
@@ -184,17 +202,17 @@ public class Builds : MonoBehaviour
         return closest;
     }
 
-    public static Vector3? GetClosestStone(Vector3 from)
+    public static (Vector3?, float) GetClosestStone(Vector3 from)
     {
-        if (INSTANCE.stonePositions.Count == 0)
+        if (INSTANCE.stones.Count == 0)
         {
-            return null;
+            return (null, 0f);
         }
-        Vector3 closest = INSTANCE.stonePositions[0];
-        float distance = (closest - from).sqrMagnitude;
-        foreach (Vector3 pos in INSTANCE.stonePositions)
+        (Vector3, float) closest = INSTANCE.stones[0];
+        float distance = (closest.Item1 - from).sqrMagnitude;
+        foreach ((Vector3, float) pos in INSTANCE.stones)
         {
-            float newDistance = (pos - from).sqrMagnitude;
+            float newDistance = (pos.Item1 - from).sqrMagnitude;
             if (newDistance < distance)
             {
                 closest = pos;
@@ -204,32 +222,34 @@ public class Builds : MonoBehaviour
         return closest;
     }
 
-    public static void AddTree(Vector3 pos)
+    public static void AddTree(Vector3 pos, float range)
     {
-        INSTANCE.treePositions.Add(pos);
+        INSTANCE.trees.Add((pos, range));
     }
 
-    public static void AddStone(Vector3 pos)
+    public static void AddStone(Vector3 pos, float range)
     {
-        INSTANCE.stonePositions.Add(pos);
+        INSTANCE.stones.Add((pos, range));
     }
 
-    public static void RemoveTree(Vector3 pos)
+    public static void RemoveTree(List<Vector3> occupying, BuildingSize size)
     {
-        Vector3 closest = INSTANCE.treePositions
-                .OrderBy(t => (t - pos).sqrMagnitude)
-                .First();
-        INSTANCE.treePositions.Remove(closest);
-        Workers.OnTreeRemoved(closest);
+        foreach (var pos in occupying)
+        {
+            INSTANCE.trees.RemoveAll(s => (s.Item1 - pos).sqrMagnitude < 0.001f);
+        }
+
+        Workers.OnTreeRemoved(occupying);
     }
 
-    public static void RemoveStone(Vector3 pos)
+    public static void RemoveStone(List<Vector3> occupying, BuildingSize size)
     {
-        Vector3 closest = INSTANCE.stonePositions
-                .OrderBy(t => (t - pos).sqrMagnitude)
-                .First();
-        INSTANCE.stonePositions.Remove(closest);
-        Workers.OnStoneRemoved(closest);
+        foreach (var pos in occupying)
+        {
+            INSTANCE.stones.RemoveAll(s => (s.Item1 - pos).sqrMagnitude < 0.001f);
+        }
+
+        Workers.OnStoneRemoved(occupying);
     }
 
     public static void UpdateNavPoints(List<Vector3> points)
@@ -266,9 +286,10 @@ public class Builds : MonoBehaviour
             suma += item;
         }
         INSTANCE.buildingPositions.Add(suma / 4);
+        BuildSpatialGrid(INSTANCE.navPoints.ConvertAll(p => p.Item1));
     }
 
-    public static List<Vector3> GetPath(Vector3 fromVec, Vector3 toVec)
+    public static List<Vector3> GetPath(Vector3 fromVec, Vector3 toVec, float searchRange)
     {
         float totalDistance = (fromVec - toVec).magnitude;
         var openSet = new PriorityQueue<Vector3, float>();
@@ -295,7 +316,7 @@ public class Builds : MonoBehaviour
                 return ReconstructPath(cameFrom, current);
             }
 
-            foreach (Vector3 neighbor in GetNeighbors(points, current, GetCellWidth() * totalDistance))
+            foreach (Vector3 neighbor in GetNeighbors(points, current, searchRange))
             {
                 float distance = Vector3.Distance(current, neighbor);
                 float edgeCost = Mathf.Pow(distance, 1.5f);
@@ -313,6 +334,50 @@ public class Builds : MonoBehaviour
         }
 
         return new();
+    }
+
+    public static List<Vector3> GetPath2(Vector3 fromVec, Vector3 toVec)
+    {
+        int fromIdx = FindNearestStaticPoint(fromVec);
+        int toIdx = FindNearestStaticPoint(toVec);
+
+        if (fromIdx == -1 || toIdx == -1)
+            return new List<Vector3>();
+
+        var gridPath = GetPathOnGrid(fromIdx, toIdx);
+        if (gridPath.Count == 0)
+            return new List<Vector3>();
+
+        var result = new List<Vector3>(gridPath.Count + 2);
+
+        result.Add(fromVec);
+
+        Vector3 snappedFrom = navPointsCache[fromIdx];
+        if (Vector3.SqrMagnitude(snappedFrom - fromVec) > 0.0001f)
+            result.Add(snappedFrom);
+
+        for (int i = 1; i < gridPath.Count - 1; i++)
+            result.Add(gridPath[i]);
+
+        Vector3 snappedTo = navPointsCache[toIdx];
+        if (Vector3.SqrMagnitude(snappedTo - toVec) > 0.0001f)
+            result.Add(snappedTo);
+
+        result.Add(toVec);
+
+        return result;
+    }
+
+    private static List<Vector3> ReconstructPath2(int[] cameFrom, int current, System.Func<int, Vector3> getPos)
+    {
+        var path = new List<Vector3>();
+        while (current != -1)
+        {
+            path.Add(getPos(current));
+            current = cameFrom[current];
+        }
+        path.Reverse();
+        return path;
     }
 
     private static IEnumerable<Vector3> GetNeighbors(List<Vector3> list, Vector3 current, float maxRadius)
@@ -390,6 +455,7 @@ public class Builds : MonoBehaviour
                 INSTANCE.navPoints.RemoveAt(index);
             }
         }
+        BuildSpatialGrid(INSTANCE.navPoints.ConvertAll(p => p.Item1));
     }
 
     public static void PrintBuildings()
@@ -430,5 +496,170 @@ public class Builds : MonoBehaviour
             text += "\n";
         }
         print(text);
+    }
+
+    public static int StoneAmount()
+    {
+        return INSTANCE.stones.Count;
+    }
+
+    public static int TreeAmount()
+    {
+        return INSTANCE.trees.Count;
+    }
+
+    private static void BuildSpatialGrid(List<Vector3> points)
+    {
+        navPointsCache = new List<Vector3>(points);
+        spatialGrid = new Dictionary<Vector2Int, List<int>>();
+
+        for (int i = 0; i < points.Count; i++)
+        {
+            var cell = ToCoords(points[i]);
+            if (!spatialGrid.TryGetValue(cell, out var list))
+            {
+                list = new List<int>();
+                spatialGrid[cell] = list;
+            }
+            list.Add(i);
+        }
+    }
+
+    private static IEnumerable<int> GetSpatialNeighbors(Vector3 pos, float radius)
+    {
+        int range = Mathf.CeilToInt(radius / CellWidth);
+        var center = ToCoords(pos);
+
+        for (int x = -range; x <= range; x++)
+        {
+            for (int z = -range; z <= range; z++)
+            {
+                var cell = new Vector2Int(center.x + x, center.y + z);
+                if (spatialGrid.TryGetValue(cell, out var indices))
+                {
+                    foreach (int idx in indices)
+                        yield return idx;
+                }
+            }
+        }
+    }
+
+    private static int FindNearestStaticPoint(Vector3 pos)
+    {
+        var centerCell = ToCoords(pos);
+        float bestDistSq = float.PositiveInfinity;
+        int bestIdx = -1;
+
+        for (int ring = 0; ; ring++)
+        {
+            for (int x = -ring; x <= ring; x++)
+            {
+                for (int z = -ring; z <= ring; z++)
+                {
+                    // Only check the perimeter of this ring (inner rings already checked)
+                    if (ring > 0 && Mathf.Abs(x) < ring && Mathf.Abs(z) < ring)
+                        continue;
+
+                    var cell = new Vector2Int(centerCell.x + x, centerCell.y + z);
+                    if (spatialGrid.TryGetValue(cell, out var indices))
+                    {
+                        foreach (int idx in indices)
+                        {
+                            float distSq = (navPointsCache[idx] - pos).sqrMagnitude;
+                            if (distSq < bestDistSq)
+                            {
+                                bestDistSq = distSq;
+                                bestIdx = idx;
+                            }
+                        }
+                    }
+                }
+            }
+
+            // Stop: anything beyond this ring is at least (ring+1)*cellSize away
+            if (bestIdx != -1 && ((ring + 1) * CellWidth) * ((ring + 1) * CellWidth) > bestDistSq)
+            {
+                break;
+            }
+
+            if (ring > 20) break; // safety
+        }
+
+        return bestIdx;
+    }
+
+    private static List<Vector3> GetPathOnGrid(int fromIdx, int toIdx)
+    {
+        if (fromIdx == toIdx)
+            return new List<Vector3> { navPointsCache[fromIdx] };
+
+        int nodeCount = navPointsCache.Count;
+        float[] gScore = new float[nodeCount];
+        int[] cameFrom = new int[nodeCount];
+        bool[] closedSet = new bool[nodeCount];
+
+        for (int i = 0; i < nodeCount; i++)
+        {
+            gScore[i] = float.PositiveInfinity;
+            cameFrom[i] = -1;
+        }
+
+        var openSet = new PriorityQueue<int, float>();
+        gScore[fromIdx] = 0f;
+
+        Vector3 toPos = navPointsCache[toIdx];
+        openSet.Enqueue(fromIdx, Vector3.Distance(navPointsCache[fromIdx], toPos));
+
+        float cellWidth = GetCellWidth();
+        float epsilon = 0.5f;
+
+        while (openSet.Count > 0)
+        {
+            int current = openSet.Dequeue();
+            if (closedSet[current]) continue;
+            closedSet[current] = true;
+
+            if (current == toIdx)
+                return ReconstructGridPath(cameFrom, toIdx);
+
+            Vector3 currentPos = navPointsCache[current];
+            float currentG = gScore[current];
+
+            foreach (int neighbor in GetSpatialNeighbors(currentPos, cellWidth * currentG))
+            {
+                if (closedSet[neighbor]) continue;
+
+                Vector3 neighborPos = navPointsCache[neighbor];
+                float distSq = (neighborPos - currentPos).sqrMagnitude;
+                float maxRadius = cellWidth * Vector3.Distance(currentPos, toPos);
+                if (distSq > maxRadius * maxRadius) continue;
+
+                float distance = Mathf.Sqrt(distSq);
+                float edgeCost = distance * Mathf.Sqrt(distance);
+                float tentativeG = currentG + edgeCost;
+
+                if (tentativeG < gScore[neighbor])
+                {
+                    cameFrom[neighbor] = current;
+                    gScore[neighbor] = tentativeG;
+                    float fScore = tentativeG + (epsilon * Vector3.Distance(neighborPos, toPos));
+                    openSet.Enqueue(neighbor, fScore);
+                }
+            }
+        }
+
+        return new();
+    }
+
+    private static List<Vector3> ReconstructGridPath(int[] cameFrom, int current)
+    {
+        var path = new List<Vector3>();
+        while (current != -1)
+        {
+            path.Add(navPointsCache[current]);
+            current = cameFrom[current];
+        }
+        path.Reverse();
+        return path;
     }
 }

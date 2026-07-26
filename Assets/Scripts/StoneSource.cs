@@ -1,10 +1,12 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class StoneSource : MonoBehaviour
 {
-    public float radius = 1.0f;
+    [SerializeField] public BuildingSize size;
     public int quantity = 100;
     public bool alive = true;
+    public List<Vector3> occupying;
 
     void Start()
     {
@@ -17,7 +19,7 @@ public class StoneSource : MonoBehaviour
         {
             // TODO: falling animation
             // TODO: update wood source node tree
-            Builds.RemoveStone(this.transform.parent.position);
+            Builds.RemoveStone(occupying, size);
             Destroy(this.transform.parent.gameObject, 0.2f);
             alive = false;
         }

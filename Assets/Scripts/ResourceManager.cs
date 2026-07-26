@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class ResourceManager : MonoBehaviour
@@ -120,10 +121,9 @@ public class ResourceManager : MonoBehaviour
         INSTANCE.resWorkers[(int)type] += 1;
     }
 
-    public static void ReduceWood(Vector3 where, float range)
+    public static int ReduceWood(Vector3 where, float range)
     {
-
-        int count = Physics.OverlapSphereNonAlloc(where, range, hitBuffer);
+        int count = Physics.OverlapSphereNonAlloc(where, range, hitBuffer, 1 << 10);
 
         WoodSource nearest = null;
         float minDistanceSqr = Mathf.Infinity;
@@ -144,14 +144,17 @@ public class ResourceManager : MonoBehaviour
 
         if (nearest != null)
         {
-            nearest.quantity -= 1;
+            nearest.quantity -= GetLevel(ResType.Wood);
+            return GetLevel(ResType.Wood);
+        }
+        {
+            return 0;
         }
     }
 
-    public static void ReduceStone(Vector3 where, float range)
+    public static int ReduceStone(Vector3 where, float range)
     {
-
-        int count = Physics.OverlapSphereNonAlloc(where, range, hitBuffer);
+        int count = Physics.OverlapSphereNonAlloc(where, range, hitBuffer, 1 << 9);
 
         StoneSource nearest = null;
         float minDistanceSqr = Mathf.Infinity;
@@ -172,7 +175,12 @@ public class ResourceManager : MonoBehaviour
 
         if (nearest != null)
         {
-            nearest.quantity -= 1;
+            nearest.quantity -= GetLevel(ResType.Stone);
+            return GetLevel(ResType.Stone);
+        }
+        else
+        {
+            return 0;
         }
     }
 }

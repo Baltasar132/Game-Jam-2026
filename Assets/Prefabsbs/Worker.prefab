@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 1327167967541287083}
   - component: {fileID: 8503171555483567929}
   - component: {fileID: 1625001703531052554}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Body
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -123,7 +123,7 @@ GameObject:
   - component: {fileID: 395535637581750713}
   - component: {fileID: 100949249615617985}
   - component: {fileID: 3455184043097913210}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Worker
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -187,8 +187,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: '::'
   centerOfBuilding: {x: 0, y: 0, z: 0}
   type: 0
-  speed: 5
-  workDoneDistance: 1
-  needsUpdate: 1
+  speed: 10
+  workDoneDistance: 0
+  pathNodeDoneDistance: 0.2
+  needsPathUpdate: 1
   reunionRadius: 2
   returning: 0
+  resourceRange: 0
+  carryingResource: 0

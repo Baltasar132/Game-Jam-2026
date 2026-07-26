@@ -1,4 +1,6 @@
 using System.Collections.Generic;
+using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -10,6 +12,13 @@ public class BuildingButton : MonoBehaviour, IBuilderPlacer
     [SerializeField] private float height = 0.5f;
     [SerializeField] private string ActionName;
     [SerializeField] private BuildingType buildingType;
+    [SerializeField] private TextMeshProUGUI text;
+
+    void Start()
+    {
+        text = GetComponentInChildren<TextMeshProUGUI>();
+        text.fontSize = 18;
+    }
 
     void FixedUpdate()
     {
@@ -17,6 +26,7 @@ public class BuildingButton : MonoBehaviour, IBuilderPlacer
         {
             Use();
         }
+        text.SetText(ActionName + "\n" + buildingType + "\n" + PriceManager.GetBuildingCost(buildingType).ToStringTMP());
     }
 
     void Use()
@@ -27,34 +37,49 @@ public class BuildingButton : MonoBehaviour, IBuilderPlacer
 
     public void PlaceBuild(Vector3 at)
     {
-        //TODO: ResourceManager.SubRes(PriceManager.getWoodWorkerPrice());
-        //TODO: ResourceManager.AddWorkers(ResType.Wood);
         //TODO: sound
+        ResourceManager.SubRes(PriceManager.GetBuildingCost(buildingType));
+        PriceManager.AddBuilding(buildingType);
         PlaceBuild(at, buildingPrefab, size, buildingType);
     }
 
     public static void Place(Vector3 at, GameObject build, BuildingSize size, BuildingType type, bool randomRotation)
     {
         Vector3 pos0 = size.Snap(at);
-        List<Vector3> occuppying = size.GetBuildingPoints(at);
+        List<Vector3> occupying = size.GetBuildingPoints(at);
         GameObject building = Instantiate(build, Builds.GetGameObject().transform);
         building.transform.position = pos0;
+
+        WoodSource woodSource = building.GetComponentInChildren<WoodSource>();
+        StoneSource stoneSource = building.GetComponentInChildren<StoneSource>();
+        if (stoneSource != null)
+        {
+            stoneSource.occupying = occupying;
+        }
+        else if (woodSource != null)
+        {
+            woodSource.occupying = occupying;
+        }
+        else
+        {
+            print("StoneSource nor WoodSource found for: " + type);
+        }
 
         if (randomRotation)
         {
             building.transform.Rotate(Vector3.up, Random.Range(0, 360));
         }
 
-        foreach (var occ_pos in occuppying)
+        foreach (var occ_pos in occupying)
         {
             Builds.PlaceAt(occ_pos, type);
             switch (type)
             {
                 case BuildingType.Tree:
-                    Builds.AddTree(occ_pos);
+                    Builds.AddTree(occ_pos, size.size * Builds.GetCellWidth() / 2f);
                     break;
                 case BuildingType.Stone:
-                    Builds.AddStone(occ_pos);
+                    Builds.AddStone(occ_pos, size.size * Builds.GetCellWidth() / 2f);
                     break;
             }
         }

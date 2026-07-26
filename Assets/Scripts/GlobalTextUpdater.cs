@@ -12,6 +12,6 @@ public class GlobalTextUpdater : MonoBehaviour
 
     void Update()
     {
-        text.SetText(ResourceManager.GetRes().ToStringTMP());
+        text.SetText(ResourceManager.GetRes().ToStringFullTMP());
     }
 }
