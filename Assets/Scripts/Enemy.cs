@@ -14,6 +14,7 @@ public class Enemy : MonoBehaviour, IHealthEnemy
     public float attackRange = 0.0f;
     public float damage = 2.0f;
 
+    [SerializeField] private float rotationSpeed = 20.0f;
     [SerializeField] private float knockbackForce = 5.0f;
     [SerializeField] private float knockbackDecay = 15.0f;
     private Vector3 knockbackVelocity = Vector3.zero;
@@ -89,13 +90,13 @@ public class Enemy : MonoBehaviour, IHealthEnemy
                 // timer resets if cannot attack
                 attackTimer = 1.0f;
                 Vector3 movement = (target.GetPos() - transform.position).normalized;
+                if (movement.sqrMagnitude > 0.001f)
+                {
+                    Quaternion targetRotation = Quaternion.LookRotation(movement);
+                    transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, rotationSpeed * Time.fixedDeltaTime);
+                }
                 transform.Translate(movement * (speed * Time.fixedDeltaTime), Space.World);
             }
-        }
-        else
-        {
-            Vector3 movement = (closest - this.transform.position).normalized;
-            transform.Translate(movement * (speed * Time.fixedDeltaTime), Space.World);
         }
     }
 
