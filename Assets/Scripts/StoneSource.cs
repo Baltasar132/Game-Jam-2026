@@ -15,10 +15,9 @@ public class StoneSource : MonoBehaviour
 
     void FixedUpdate()
     {
-        if (quantity == 0 && alive)
+        if (quantity <= 0 && alive)
         {
             // TODO: falling animation
-            // TODO: update wood source node tree
             Builds.RemoveStone(occupying, size);
             Destroy(this.transform.parent.gameObject, 0.2f);
             alive = false;

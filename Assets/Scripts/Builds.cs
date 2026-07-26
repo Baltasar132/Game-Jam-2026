@@ -236,6 +236,7 @@ public class Builds : MonoBehaviour
     {
         foreach (var pos in occupying)
         {
+            Builds.PlaceAt(pos, BuildingType.None);
             INSTANCE.trees.RemoveAll(s => (s.Item1 - pos).sqrMagnitude < 0.001f);
         }
 
@@ -246,6 +247,7 @@ public class Builds : MonoBehaviour
     {
         foreach (var pos in occupying)
         {
+            Builds.PlaceAt(pos, BuildingType.None);
             INSTANCE.stones.RemoveAll(s => (s.Item1 - pos).sqrMagnitude < 0.001f);
         }
 
