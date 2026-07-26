@@ -3,15 +3,22 @@ using UnityEngine.InputSystem;
 
 public class Player : MonoBehaviour
 {
-    public float speed = 5;
+    public float speed = 5f, rotationSpeed = 10f;
+    public Animator animator;
+
+    
 
     void FixedUpdate()
     {
-        Vector2 movement2d = InputSystem.actions["Move"].ReadValue<Vector2>();
-        Vector3 movement = new Vector3(movement2d.x, 0, movement2d.y);
+        Vector2 input = InputSystem.actions["Move"].ReadValue<Vector2>();
+        Vector3 movement = new(input.x, 0, input.y);
 
-        // ResourceManager.WalkingSound(movement.magnitude);
+        if (movement != Vector3.zero)
+            transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(movement), rotationSpeed * Time.fixedDeltaTime);
 
         transform.Translate(movement * speed * Time.fixedDeltaTime, Space.World);
+        animator.SetBool("Running", movement != Vector3.zero);
     }
+
+    
 }
