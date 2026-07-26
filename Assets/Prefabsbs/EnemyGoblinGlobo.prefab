@@ -8,6 +8,38 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: -2360861966183862936, guid: b91f21c5b7411924187ed9cbf3db2c7e, type: 3}
+      propertyPath: speed
+      value: 15
+      objectReference: {fileID: 0}
+    - target: {fileID: -2360861966183862936, guid: b91f21c5b7411924187ed9cbf3db2c7e, type: 3}
+      propertyPath: timer
+      value: 0.2
+      objectReference: {fileID: 0}
+    - target: {fileID: -2360861966183862936, guid: b91f21c5b7411924187ed9cbf3db2c7e, type: 3}
+      propertyPath: maxHealth
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: -2360861966183862936, guid: b91f21c5b7411924187ed9cbf3db2c7e, type: 3}
+      propertyPath: attackTimer
+      value: 0.2
+      objectReference: {fileID: 0}
+    - target: {fileID: -2360861966183862936, guid: b91f21c5b7411924187ed9cbf3db2c7e, type: 3}
+      propertyPath: currentHealth
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: -2360861966183862936, guid: b91f21c5b7411924187ed9cbf3db2c7e, type: 3}
+      propertyPath: rotationSpeed
+      value: 40
+      objectReference: {fileID: 0}
+    - target: {fileID: -2360861966183862936, guid: b91f21c5b7411924187ed9cbf3db2c7e, type: 3}
+      propertyPath: knockbackForce
+      value: 50
+      objectReference: {fileID: 0}
+    - target: {fileID: -2360861966183862936, guid: b91f21c5b7411924187ed9cbf3db2c7e, type: 3}
+      propertyPath: buildingSearchRange
+      value: 3
+      objectReference: {fileID: 0}
     - target: {fileID: 5635683498328824734, guid: b91f21c5b7411924187ed9cbf3db2c7e, type: 3}
       propertyPath: m_Name
       value: EnemyGoblinGlobo
@@ -52,6 +84,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8142535202109912034, guid: b91f21c5b7411924187ed9cbf3db2c7e, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects:
@@ -75,27 +111,27 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: -8679921383154817045, guid: 91999c3da4d184f45abb4c8b30bc0908, type: 3}
       propertyPath: m_LocalScale.x
-      value: 0.05
+      value: 0.04
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 91999c3da4d184f45abb4c8b30bc0908, type: 3}
       propertyPath: m_LocalScale.y
-      value: 0.05
+      value: 0.04
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 91999c3da4d184f45abb4c8b30bc0908, type: 3}
       propertyPath: m_LocalScale.z
-      value: 0.05
+      value: 0.04
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 91999c3da4d184f45abb4c8b30bc0908, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0.1
+      value: -0.023
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 91999c3da4d184f45abb4c8b30bc0908, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.11722
+      value: 0.077
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 91999c3da4d184f45abb4c8b30bc0908, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -0.08728
+      value: 0.099
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 91999c3da4d184f45abb4c8b30bc0908, type: 3}
       propertyPath: m_LocalRotation.w

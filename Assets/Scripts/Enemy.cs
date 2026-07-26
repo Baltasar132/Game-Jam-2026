@@ -98,6 +98,17 @@ public class Enemy : MonoBehaviour, IHealthEnemy
                 transform.Translate(movement * (speed * Time.fixedDeltaTime), Space.World);
             }
         }
+        else
+        {
+            Vector3 movement = (closest - this.transform.position).normalized;
+            if (movement.sqrMagnitude > 0.001f)
+            {
+                Quaternion targetRotation = Quaternion.LookRotation(movement);
+                transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, rotationSpeed * Time.fixedDeltaTime);
+            }
+            transform.Translate(movement * (speed * Time.fixedDeltaTime), Space.World);
+
+        }
     }
 
     private IHealthBuilding GetCloseHealth()
