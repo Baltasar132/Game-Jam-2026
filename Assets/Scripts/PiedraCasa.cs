@@ -44,8 +44,8 @@ public class PiedraCasa : MonoBehaviour, IInteractable
         if (PriceManager.getStoneWorkerPrice() <= ResourceManager.GetRes())
         {
             Vector3 centerOfBuilding = this.transform.parent.position + new Vector3(Builds.GetCellWidth() / 2, 0, Builds.GetCellWidth() / 2);
-            Vector3? closestStone = Builds.GetClosestStone(centerOfBuilding);
-            Vector3 spawningTowards = closestStone ?? new Vector3(-1000f, 0f, -1000f);
+            (Vector3?, float) closestStone = Builds.GetClosestStone(centerOfBuilding);
+            Vector3 spawningTowards = closestStone.Item1 ?? new Vector3(-1000f, 0f, -1000f);
             Vector3 spawnPoint = centerOfBuilding + (spawningTowards - centerOfBuilding).normalized * reunionRadius * Builds.GetCellWidth();
 
             ResourceManager.SubRes(PriceManager.getStoneWorkerPrice());
@@ -54,10 +54,11 @@ public class PiedraCasa : MonoBehaviour, IInteractable
             new_worker.transform.position = spawnPoint;
             Worker new_worker2 = new_worker.GetComponent<Worker>();
             new_worker2.returnPoint = spawnPoint;
-            new_worker2.resourcePoint = closestStone;
+            new_worker2.resourcePoint = closestStone.Item1;
             new_worker2.type = Worker.WorkerType.Stone;
             new_worker2.centerOfBuilding = centerOfBuilding;
             new_worker2.reunionRadius = reunionRadius;
+            new_worker2.resourceRange = closestStone.Item2;
             Workers.AddWorker(new_worker2);
         }
     }

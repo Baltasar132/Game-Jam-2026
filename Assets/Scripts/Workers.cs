@@ -48,28 +48,42 @@ public class Workers : MonoBehaviour
         }
     }
 
-    public static void OnTreeRemoved(Vector3 where)
+    public static void OnTreeRemoved(List<Vector3> wheres)
     {
         List<Worker> workers = INSTANCE.workers.Where(worker => worker.type == Worker.WorkerType.Wood).ToList();
         foreach (Worker worker in workers)
         {
-            if (worker.resourcePoint == where)
+            foreach (var where in wheres)
             {
-                worker.UpdateResourcePoint();
-                worker.needsUpdate = true;
+                if (worker.resourcePoint.HasValue && Vector3.SqrMagnitude(worker.resourcePoint.Value - where) < 0.01f)
+                {
+                    worker.UpdateResourcePoint();
+                    worker.needsUpdate = true;
+                    break;
+                }
             }
         }
     }
 
-    public static void OnStoneRemoved(Vector3 where)
+    public static void OnStoneRemoved(List<Vector3> wheres)
     {
         List<Worker> workers = INSTANCE.workers.Where(worker => worker.type == Worker.WorkerType.Stone).ToList();
+
+        foreach (var item in wheres)
+        {
+            print("Quitando: " + item);
+        }
         foreach (Worker worker in workers)
         {
-            if (worker.resourcePoint == where)
+            print("Para el worker" + worker.resourcePoint);
+            foreach (var where in wheres)
             {
-                worker.UpdateResourcePoint();
-                worker.needsUpdate = true;
+                if (worker.resourcePoint.HasValue && Vector3.SqrMagnitude(worker.resourcePoint.Value - where) < 0.01f)
+                {
+                    worker.UpdateResourcePoint();
+                    worker.needsUpdate = true;
+                    break;
+                }
             }
         }
     }

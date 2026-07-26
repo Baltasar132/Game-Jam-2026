@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class Builds : MonoBehaviour
@@ -12,8 +13,9 @@ public class Builds : MonoBehaviour
     public List<BuildingType> buildings;
     public List<(Vector3, int)> navPoints = new();
     public List<Vector3> buildingPositions = new();
-    public List<Vector3> treePositions = new();
-    public List<Vector3> stonePositions = new();
+    // (position, range)
+    public List<(Vector3, float)> trees = new();
+    public List<(Vector3, float)> stones = new();
 
     void Awake()
     {
@@ -164,17 +166,17 @@ public class Builds : MonoBehaviour
         return closest;
     }
 
-    public static Vector3? GetClosestTree(Vector3 from)
+    public static (Vector3?, float) GetClosestTree(Vector3 from)
     {
-        if (INSTANCE.treePositions.Count == 0)
+        if (INSTANCE.trees.Count == 0)
         {
-            return null;
+            return (null, 0f);
         }
-        Vector3 closest = INSTANCE.treePositions[0];
-        float distance = (closest - from).sqrMagnitude;
-        foreach (Vector3 pos in INSTANCE.treePositions)
+        (Vector3, float) closest = INSTANCE.trees[0];
+        float distance = (closest.Item1 - from).sqrMagnitude;
+        foreach ((Vector3, float) pos in INSTANCE.trees)
         {
-            float newDistance = (pos - from).sqrMagnitude;
+            float newDistance = (pos.Item1 - from).sqrMagnitude;
             if (newDistance < distance)
             {
                 closest = pos;
@@ -184,17 +186,17 @@ public class Builds : MonoBehaviour
         return closest;
     }
 
-    public static Vector3? GetClosestStone(Vector3 from)
+    public static (Vector3?, float) GetClosestStone(Vector3 from)
     {
-        if (INSTANCE.stonePositions.Count == 0)
+        if (INSTANCE.stones.Count == 0)
         {
-            return null;
+            return (null, 0f);
         }
-        Vector3 closest = INSTANCE.stonePositions[0];
-        float distance = (closest - from).sqrMagnitude;
-        foreach (Vector3 pos in INSTANCE.stonePositions)
+        (Vector3, float) closest = INSTANCE.stones[0];
+        float distance = (closest.Item1 - from).sqrMagnitude;
+        foreach ((Vector3, float) pos in INSTANCE.stones)
         {
-            float newDistance = (pos - from).sqrMagnitude;
+            float newDistance = (pos.Item1 - from).sqrMagnitude;
             if (newDistance < distance)
             {
                 closest = pos;
@@ -204,32 +206,34 @@ public class Builds : MonoBehaviour
         return closest;
     }
 
-    public static void AddTree(Vector3 pos)
+    public static void AddTree(Vector3 pos, float range)
     {
-        INSTANCE.treePositions.Add(pos);
+        INSTANCE.trees.Add((pos, range));
     }
 
-    public static void AddStone(Vector3 pos)
+    public static void AddStone(Vector3 pos, float range)
     {
-        INSTANCE.stonePositions.Add(pos);
+        INSTANCE.stones.Add((pos, range));
     }
 
-    public static void RemoveTree(Vector3 pos)
+    public static void RemoveTree(List<Vector3> occupying, BuildingSize size)
     {
-        Vector3 closest = INSTANCE.treePositions
-                .OrderBy(t => (t - pos).sqrMagnitude)
-                .First();
-        INSTANCE.treePositions.Remove(closest);
-        Workers.OnTreeRemoved(closest);
+        foreach (var pos in occupying)
+        {
+            INSTANCE.trees.RemoveAll(s => (s.Item1 - pos).sqrMagnitude < 0.001f);
+        }
+
+        Workers.OnTreeRemoved(occupying);
     }
 
-    public static void RemoveStone(Vector3 pos)
+    public static void RemoveStone(List<Vector3> occupying, BuildingSize size)
     {
-        Vector3 closest = INSTANCE.stonePositions
-                .OrderBy(t => (t - pos).sqrMagnitude)
-                .First();
-        INSTANCE.stonePositions.Remove(closest);
-        Workers.OnStoneRemoved(closest);
+        foreach (var pos in occupying)
+        {
+            INSTANCE.stones.RemoveAll(s => (s.Item1 - pos).sqrMagnitude < 0.001f);
+        }
+
+        Workers.OnStoneRemoved(occupying);
     }
 
     public static void UpdateNavPoints(List<Vector3> points)
@@ -430,5 +434,15 @@ public class Builds : MonoBehaviour
             text += "\n";
         }
         print(text);
+    }
+
+    public static int StoneAmount()
+    {
+        return INSTANCE.stones.Count;
+    }
+
+    public static int TreeAmount()
+    {
+        return INSTANCE.trees.Count;
     }
 }

@@ -122,8 +122,7 @@ public class ResourceManager : MonoBehaviour
 
     public static void ReduceWood(Vector3 where, float range)
     {
-
-        int count = Physics.OverlapSphereNonAlloc(where, range, hitBuffer);
+        int count = Physics.OverlapSphereNonAlloc(where, range, hitBuffer, 1 << 10);
 
         WoodSource nearest = null;
         float minDistanceSqr = Mathf.Infinity;
@@ -144,14 +143,16 @@ public class ResourceManager : MonoBehaviour
 
         if (nearest != null)
         {
-            nearest.quantity -= 1;
+            nearest.quantity -= 100;
+        }
+        {
+            print("No se encontró árbol en " + where + " con " + Builds.StoneAmount() + " árboles");
         }
     }
 
     public static void ReduceStone(Vector3 where, float range)
     {
-
-        int count = Physics.OverlapSphereNonAlloc(where, range, hitBuffer);
+        int count = Physics.OverlapSphereNonAlloc(where, range, hitBuffer, 1 << 9);
 
         StoneSource nearest = null;
         float minDistanceSqr = Mathf.Infinity;
@@ -172,7 +173,11 @@ public class ResourceManager : MonoBehaviour
 
         if (nearest != null)
         {
-            nearest.quantity -= 1;
+            nearest.quantity -= 1000;
+        }
+        else
+        {
+            print("No se encontró piedra en " + where + " con " + Builds.StoneAmount() + " piedras");
         }
     }
 }
