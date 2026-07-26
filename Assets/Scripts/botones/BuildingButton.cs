@@ -29,6 +29,11 @@ public class BuildingButton : MonoBehaviour, IBuilderPlacer
         text.SetText(ActionName + "\n" + buildingType + "\n" + PriceManager.GetBuildingCost(buildingType).ToStringTMP());
     }
 
+    public BuildingType GetBuildingType()
+    {
+        return buildingType;
+    }
+
     void Use()
     {
         MouseHandler.CreateGhost(this.ghostBuildingPrefab, this);

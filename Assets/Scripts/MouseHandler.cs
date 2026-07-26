@@ -38,7 +38,7 @@ public class MouseHandler : MonoBehaviour
             if (ground.Raycast(ray, out float enter))
             {
                 Vector3 hitPoint = ray.GetPoint(enter);
-                if (placer.CanPlace(hitPoint))
+                if (placer.CanPlace(hitPoint) && PriceManager.CanExpend(PriceManager.GetBuildingCost(placer.GetBuildingType())))
                 {
                     placer.PlaceBuild(hitPoint);
                 }

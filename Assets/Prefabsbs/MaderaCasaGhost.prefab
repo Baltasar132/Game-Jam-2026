@@ -8,6 +8,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 261991073846881726, guid: 2e5b8086dfbac0056a9085ce53e187de, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1912595509615885402, guid: 2e5b8086dfbac0056a9085ce53e187de, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3706271765589795551, guid: 2e5b8086dfbac0056a9085ce53e187de, type: 3}
       propertyPath: m_Name
       value: MaderaCasaGhost
@@ -16,6 +24,10 @@ PrefabInstance:
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
       objectReference: {fileID: 2100000, guid: 44f1bcd510123a24f8e748f2db494bd2, type: 2}
+    - target: {fileID: 6027654958441646284, guid: 2e5b8086dfbac0056a9085ce53e187de, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7164733126207307823, guid: 2e5b8086dfbac0056a9085ce53e187de, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -54,6 +66,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7164733126207307823, guid: 2e5b8086dfbac0056a9085ce53e187de, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7887813587282777890, guid: 2e5b8086dfbac0056a9085ce53e187de, type: 3}
+      propertyPath: m_Enabled
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []

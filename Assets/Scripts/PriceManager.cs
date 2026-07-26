@@ -55,6 +55,11 @@ public class PriceManager : MonoBehaviour
     {
         return ResourcesVec.Zero().AddStone((ResourceManager.GetWorkers(ResType.Wood) + 1) * 10);
     }
+
+    public static bool CanExpend(ResourcesVec res)
+    {
+        return ResourceManager.GetRes() >= res;
+    }
 }
 
 [Serializable]

@@ -7,6 +7,8 @@ public interface IBuilderPlacer
 
     bool CanPlace(Vector3 at);
 
+    BuildingType GetBuildingType();
+
     float PlaneHeight()
     {
         return 0.5f;

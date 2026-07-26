@@ -52,6 +52,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3389637828040397153, guid: ee079718674cc9e038a95c014a1ee328, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3560874020781417812, guid: ee079718674cc9e038a95c014a1ee328, type: 3}
       propertyPath: m_Name
       value: Casa1Ghost
@@ -65,6 +69,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 2100000, guid: 44f1bcd510123a24f8e748f2db494bd2, type: 2}
     - target: {fileID: 6670490128222552251, guid: ee079718674cc9e038a95c014a1ee328, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7160090632817598253, guid: ee079718674cc9e038a95c014a1ee328, type: 3}
       propertyPath: m_Enabled
       value: 0
       objectReference: {fileID: 0}
