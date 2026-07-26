@@ -9,6 +9,11 @@ public class Builds : MonoBehaviour
     [SerializeField] private int height = 10;
     [SerializeField] private float cellWidth = 3;
 
+    public static float MinX => -Width * CellWidth / 2;
+    public static float MaxX => Width * CellWidth / 2;
+    public static float MinZ => -Height * CellWidth / 2;
+    public static float MaxZ => Height * CellWidth / 2;
+
     private static Builds INSTANCE;
     public List<BuildingType> buildings;
     public List<(Vector3, int)> navPoints = new();

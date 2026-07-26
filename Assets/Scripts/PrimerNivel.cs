@@ -99,7 +99,7 @@ public class PrimerNivel : MonoBehaviour
     {
         if (InputSystem.actions["F1Button"].IsPressed())
         {
-            Enemies.SpawnEnemyRandom();
+            Enemies.SpawnEnemyCircle();
         }
     }
 }
