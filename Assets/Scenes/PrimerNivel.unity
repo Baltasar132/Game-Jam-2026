@@ -895,6 +895,48 @@ MonoBehaviour:
   - countDown: 30
     enemyCount: 20
     direction: 3
+  - countDown: 21.1
+    enemyCount: 100
+    direction: 3
+  - countDown: 21.1
+    enemyCount: 100
+    direction: 3
+  - countDown: 21.1
+    enemyCount: 100
+    direction: 3
+  - countDown: 21.1
+    enemyCount: 100
+    direction: 3
+  - countDown: 21.1
+    enemyCount: 100
+    direction: 3
+  - countDown: 21.1
+    enemyCount: 100
+    direction: 3
+  - countDown: 21.1
+    enemyCount: 100
+    direction: 3
+  - countDown: 21.1
+    enemyCount: 100
+    direction: 3
+  - countDown: 21.1
+    enemyCount: 100
+    direction: 3
+  - countDown: 21.1
+    enemyCount: 100
+    direction: 3
+  - countDown: 21.1
+    enemyCount: 100
+    direction: 3
+  - countDown: 21.1
+    enemyCount: 100
+    direction: 3
+  - countDown: 21.1
+    enemyCount: 100
+    direction: 3
+  - countDown: 21.1
+    enemyCount: 100
+    direction: 3
   currentWave:
     countDown: 10
     enemyCount: 10

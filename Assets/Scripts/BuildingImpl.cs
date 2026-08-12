@@ -11,7 +11,6 @@ public class BuildingImpl : MonoBehaviour, IHealthBuilding
     [SerializeField] public Vector3 center;
     [SerializeField] public Vector3 placePoint;
     [SerializeField] public BuildingType type;
-    [SerializeField] public GameObject AnimationHolder;
 
     public void FixedUpdate()
     {
@@ -20,7 +19,6 @@ public class BuildingImpl : MonoBehaviour, IHealthBuilding
             if (type == BuildingType.Center)
             {
                 StartCoroutine(StartGameSeq());
-                AnimationHolder.SetActive(true);
                 return;
             }
             Destroy(this.transform.parent.gameObject);
@@ -63,6 +61,6 @@ public class BuildingImpl : MonoBehaviour, IHealthBuilding
     static IEnumerator StartGameSeq()
     {
         yield return new WaitForSeconds(2f);
-        SceneManager.LoadScene("PantallaDerrota");
+        SceneManager.LoadScene("PantallaDerrotaPro");
     }
 }
